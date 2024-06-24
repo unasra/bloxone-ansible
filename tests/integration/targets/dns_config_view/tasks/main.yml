@@ -1,0 +1,134 @@
+---
+- module_defaults:
+    group/infoblox.bloxone.all:
+      csp_url: "{{ csp_url }}"
+      api_key: "{{ api_key }}"
+  block:
+    # Create a random View name to avoid conflicts
+    - ansible.builtin.set_fact:
+        name: "test-view-{{ 999999 | random | string }}"
+
+    # Basic Test for View
+    - name: Create a View (check mode)
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: present
+      check_mode: true
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view is changed
+          - view_info is not failed
+          - view_info.objects | length == 0
+
+    - name: Create a View
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: present
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view_info is not failed
+          - view_info.objects | length == 1
+          - view_info.objects[0].id == view.id
+          - view_info.objects[0].name == view.object.name
+
+    - name: Create a View (idempotent)
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: present
+      register: view
+    - assert:
+        that:
+          - view is not changed
+          - view is not failed
+
+    - name: Delete the View (check mode)
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: absent
+      check_mode: true
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view is changed
+          - view_info is not failed
+          - view_info.objects | length == 1
+
+    - name: Delete the View
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: absent
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view is changed
+          - view_info is not failed
+          - view_info.objects | length == 0
+
+    - name: Delete a View (idempotent)
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: absent
+      register: view
+    - assert:
+        that:
+          - view is not changed
+          - view is not failed
+
+    - name: Create a View with tags
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        tags:
+          location: "site-1"
+        state: present
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view_info is not failed
+          - view_info.objects | length == 1
+          - view_info.objects[0].id == view.id
+          - view_info.objects[0].tags.location == "site-1"
+
+    - name: Create a View with a comment
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        comment: "Test Comment"
+        state: present
+      register: view
+    - name: Get Information about the View
+      infoblox.bloxone.dns_config_view_info:
+        filters:
+          name: "{{ name }}"
+      register: view_info
+    - assert:
+        that:
+          - view_info is not failed
+          - view_info.objects | length == 1
+          - view_info.objects[0].id == view.id
+          - view_info.objects[0].comment == "Test Comment"
