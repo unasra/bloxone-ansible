@@ -45,7 +45,9 @@ options:
             - "Defaults to empty."
         type: list
         elements: dict
-        suboptions:
+
+        SUBOPTIONS:
+
             address:
                 description:
                     - "IPv4 address."
@@ -3868,7 +3870,9 @@ class ViewModule(BloxoneAnsibleModule):
                 after=item,
             )
             result["object"] = item
-            result["id"] = self.existing.id if self.existing is not None else item["id"] if (item and "id" in item) else None
+            result["id"] = (
+                self.existing.id if self.existing is not None else item["id"] if (item and "id" in item) else None
+            )
         except ApiException as e:
             self.fail_json(msg=f"Failed to execute command: {e.status} {e.reason} {e.body}")
 
@@ -3881,186 +3885,337 @@ def main():
         state=dict(type="str", required=False, choices=["present", "absent"], default="present"),
         add_edns_option_in_outgoing_query=dict(type="bool"),
         comment=dict(type="str"),
-        custom_root_ns=dict(type="list", elements="dict", options=dict(
-            address=dict(type="str"),
-            fqdn=dict(type="str"),
-        )),
+        custom_root_ns=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                address=dict(type="str"),
+                fqdn=dict(type="str"),
+            ),
+        ),
         custom_root_ns_enabled=dict(type="bool"),
         disabled=dict(type="bool"),
         dnssec_enable_validation=dict(type="bool"),
         dnssec_enabled=dict(type="bool"),
-        dnssec_trust_anchors=dict(type="list", elements="dict", options=dict(
-            algorithm=dict(type="int"),
-            public_key=dict(type="str"),
-            sep=dict(type="bool"),
-            zone=dict(type="str"),
-        )),
+        dnssec_trust_anchors=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                algorithm=dict(type="int"),
+                public_key=dict(type="str"),
+                sep=dict(type="bool"),
+                zone=dict(type="str"),
+            ),
+        ),
         dnssec_validate_expiry=dict(type="bool"),
-        dtc_config=dict(type="dict", options=dict(
-            default_ttl=dict(type="int"),
-        )),
+        dtc_config=dict(
+            type="dict",
+            options=dict(
+                default_ttl=dict(type="int"),
+            ),
+        ),
         ecs_enabled=dict(type="bool"),
         ecs_forwarding=dict(type="bool"),
         ecs_prefix_v4=dict(type="int"),
         ecs_prefix_v6=dict(type="int"),
-        ecs_zones=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            fqdn=dict(type="str"),
-        )),
+        ecs_zones=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                fqdn=dict(type="str"),
+            ),
+        ),
         edns_udp_size=dict(type="int"),
-        filter_aaaa_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
+        filter_aaaa_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
         filter_aaaa_on_v4=dict(type="str"),
-        forwarders=dict(type="list", elements="dict", options=dict(
-            address=dict(type="str"),
-            fqdn=dict(type="str"),
-        )),
+        forwarders=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                address=dict(type="str"),
+                fqdn=dict(type="str"),
+            ),
+        ),
         forwarders_only=dict(type="bool"),
         gss_tsig_enabled=dict(type="bool"),
-        inheritance_sources=dict(type="dict", options=dict(
-            add_edns_option_in_outgoing_query=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            custom_root_ns_block=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            dnssec_validation_block=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            dtc_config=dict(type="dict", options=dict(
-                default_ttl=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-            )),
-            ecs_block=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            edns_udp_size=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            filter_aaaa_acl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            filter_aaaa_on_v4=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            forwarders_block=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            gss_tsig_enabled=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            lame_ttl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            match_recursive_only=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            max_cache_ttl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            max_negative_ttl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            max_udp_size=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            minimal_responses=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            notify=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            query_acl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            recursion_acl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            recursion_enabled=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            sort_list=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            synthesize_address_records_from_https=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            transfer_acl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            update_acl=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            use_forwarders_for_subzones=dict(type="dict", options=dict(
-                action=dict(type="str"),
-            )),
-            zone_authority=dict(type="dict", options=dict(
-                default_ttl=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                expire=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                mname_block=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                negative_ttl=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                protocol_rname=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                refresh=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                retry=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-                rname=dict(type="dict", options=dict(
-                    action=dict(type="str"),
-                )),
-            )),
-        )),
+        inheritance_sources=dict(
+            type="dict",
+            options=dict(
+                add_edns_option_in_outgoing_query=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                custom_root_ns_block=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                dnssec_validation_block=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                dtc_config=dict(
+                    type="dict",
+                    options=dict(
+                        default_ttl=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                    ),
+                ),
+                ecs_block=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                edns_udp_size=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                filter_aaaa_acl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                filter_aaaa_on_v4=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                forwarders_block=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                gss_tsig_enabled=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                lame_ttl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                match_recursive_only=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                max_cache_ttl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                max_negative_ttl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                max_udp_size=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                minimal_responses=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                notify=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                query_acl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                recursion_acl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                recursion_enabled=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                sort_list=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                synthesize_address_records_from_https=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                transfer_acl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                update_acl=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                use_forwarders_for_subzones=dict(
+                    type="dict",
+                    options=dict(
+                        action=dict(type="str"),
+                    ),
+                ),
+                zone_authority=dict(
+                    type="dict",
+                    options=dict(
+                        default_ttl=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        expire=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        mname_block=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        negative_ttl=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        protocol_rname=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        refresh=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        retry=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                        rname=dict(
+                            type="dict",
+                            options=dict(
+                                action=dict(type="str"),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
         ip_spaces=dict(type="list", elements="str"),
         lame_ttl=dict(type="int"),
-        match_clients_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
-        match_destinations_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
+        match_clients_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
+        match_destinations_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
         match_recursive_only=dict(type="bool"),
         max_cache_ttl=dict(type="int"),
         max_negative_ttl=dict(type="int"),
@@ -4068,80 +4223,118 @@ def main():
         minimal_responses=dict(type="bool"),
         name=dict(type="str"),
         notify=dict(type="bool"),
-        query_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
-        recursion_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
+        query_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
+        recursion_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
         recursion_enabled=dict(type="bool"),
-        sort_list=dict(type="list", elements="dict", options=dict(
-            acl=dict(type="str"),
-            element=dict(type="str"),
-            prioritized_networks=dict(type="list", elements="str"),
-            source=dict(type="str"),
-        )),
+        sort_list=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                acl=dict(type="str"),
+                element=dict(type="str"),
+                prioritized_networks=dict(type="list", elements="str"),
+                source=dict(type="str"),
+            ),
+        ),
         synthesize_address_records_from_https=dict(type="bool"),
         tags=dict(type="dict"),
-        transfer_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
-        update_acl=dict(type="list", elements="dict", options=dict(
-            access=dict(type="str"),
-            acl=dict(type="str"),
-            address=dict(type="str"),
-            element=dict(type="str"),
-            tsig_key=dict(type="dict", no_log=True, options=dict(
-                algorithm=dict(type="str"),
-                comment=dict(type="str"),
-                key=dict(type="str", no_log=True),
-                name=dict(type="str"),
-                secret=dict(type="str", no_log=True),
-            )),
-        )),
+        transfer_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
+        update_acl=dict(
+            type="list",
+            elements="dict",
+            options=dict(
+                access=dict(type="str"),
+                acl=dict(type="str"),
+                address=dict(type="str"),
+                element=dict(type="str"),
+                tsig_key=dict(
+                    type="dict",
+                    no_log=True,
+                    options=dict(
+                        algorithm=dict(type="str"),
+                        comment=dict(type="str"),
+                        key=dict(type="str", no_log=True),
+                        name=dict(type="str"),
+                        secret=dict(type="str", no_log=True),
+                    ),
+                ),
+            ),
+        ),
         use_forwarders_for_subzones=dict(type="bool"),
         use_root_forwarders_for_local_resolution_with_b1td=dict(type="bool"),
-        zone_authority=dict(type="dict", options=dict(
-            default_ttl=dict(type="int"),
-            expire=dict(type="int"),
-            mname=dict(type="str"),
-            negative_ttl=dict(type="int"),
-            refresh=dict(type="int"),
-            retry=dict(type="int"),
-            rname=dict(type="str"),
-            use_default_mname=dict(type="bool"),
-        )),
-
+        zone_authority=dict(
+            type="dict",
+            options=dict(
+                default_ttl=dict(type="int"),
+                expire=dict(type="int"),
+                mname=dict(type="str"),
+                negative_ttl=dict(type="int"),
+                refresh=dict(type="int"),
+                retry=dict(type="int"),
+                rname=dict(type="str"),
+                use_default_mname=dict(type="bool"),
+            ),
+        ),
     )
 
     module = ViewModule(
