@@ -1,3 +1,5 @@
 deprecated_features:
   - b1_ipam_ip_space - is deprecated in favor of `ipam_ip_space`.
   - b1_ipam_ip_space_gather - is deprecated in favor of `ipam_ip_space_info`.
+  - b1_dns_view - is deprecated in favor of `dns_config_view`.
+  - b1_dns_view_gather - is deprecated in favor of `dns_config_view_info`.

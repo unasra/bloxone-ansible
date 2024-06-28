@@ -45,9 +45,7 @@ options:
             - "Defaults to empty."
         type: list
         elements: dict
-
-        SUBOPTIONS:
-
+        suboptions:
             address:
                 description:
                     - "IPv4 address."

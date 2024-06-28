@@ -170,8 +170,8 @@
           - view_info is not failed
           - view_info.objects | length == 1
           - view_info.objects[0].id == view.id
-          - view_info.objects[0].custom_root_ns.address == "192.168.10.10"
-          - view_info.objects[0].custom_root_ns.fqdn == "as-example.com."
+          - view_info.objects[0].custom_root_ns[0].address == "192.168.10.10"
+          - view_info.objects[0].custom_root_ns[0].fqdn == "as-example.com."
 
 
     - name: Create a View with Custom Root NS Enabled
@@ -229,7 +229,7 @@
           - view_info is not failed
           - view_info.objects | length == 1
           - view_info.objects[0].id == view.id
-          - view_info.objects[0].dnssec_enable_validation == true
+          - view_info.objects[0].dnssec_enable_validation == false
 
     - name: Create a View with DNS Sec Trust Anchors
       infoblox.bloxone.dns_config_view:
@@ -272,9 +272,9 @@
           - view_info is not failed
           - view_info.objects | length == 1
           - view_info.objects[0].id == view.id
-          - view_info.objects[0].dnssec_validate_expiry == true
+          - view_info.objects[0].dnssec_validate_expiry == false
 
-    - name: Create a View with DNS Sec Keys Expiry Validation
+    - name: Create a View with Default TTL
       infoblox.bloxone.dns_config_view:
         name: "{{ name }}"
         dtc_config:
@@ -486,68 +486,63 @@
           - view_info.objects[0].id == view.id
           - view_info.objects[0].gss_tsig_enabled == true
 
-    - name: "Create an IP space with Inheritance Sources"
+    - name: "Create an View space with Inheritance Sources"
       infoblox.bloxone.dns_config_view:
         name: "{{ name }}"
         inheritance_sources:
-          dhcp_config:
-            lease_time:
-              action: override
-            # The API currently requires all fields inside the inheritance config to be explicitly provided,
-            # or it fails with error 'The value of an inheritance action field is not valid'.
-            add_edns_option_in_outgoing_query:
+          # The API currently requires all fields inside the inheritance config to be explicitly provided,
+          # or it fails with error 'The value of an inheritance action field is not valid'.
+          add_edns_option_in_outgoing_query:
+            action: inherit
+          custom_root_ns_block:
+            action: inherit
+          ecs_block:
+            action: inherit
+          edns_udp_size:
+            action: inherit
+          dnssec_validation_block:
+            action: inherit
+          filter_aaaa_on_v4:
+            action: inherit
+          gss_tsig_enabled:
+            action: inherit
+          lame_ttl:
+            action: inherit
+          match_recursive_only:
+            action: inherit
+          max_cache_ttl:
+            action: inherit
+          max_negative_ttl:
+            action: inherit
+          minimal_responses:
+            action: inherit
+          notify:
+            action: inherit
+          recursion_enabled:
+            action: inherit
+          sort_list:
+            action: inherit
+          synthesize_address_records_from_https:
+            action: inherit
+          transfer_acl:
+            action: inherit
+          use_forwarders_for_subzones:
+            action: inherit
+          zone_authority:
+            default_ttl:
               action: inherit
-            custom_root_ns_block:
+            expire:
               action: inherit
-            ecs_block:
+            mname_block:
               action: inherit
-            edns_udp_size:
+            negative_ttl:
               action: inherit
-            dnssec_validation_block:
+            refresh:
               action: inherit
-            filter_aaaa_on_v4:
+            retry:
               action: inherit
-            gss_tsig_enabled:
+            rname:
               action: inherit
-            kerberos_keys:
-              action: inherit
-            lame_ttl:
-              action: inherit
-            match_recursive_only:
-              action: inherit
-            max_cache_ttl:
-              action: inherit
-            max_negative_ttl:
-              action: inherit
-            minimal_responses:
-              action: inherit
-            notify:
-              action: inherit
-            recursion_enabled:
-              action: inherit
-            sort_list:
-              action: inherit
-            synthesize_address_records_from_https:
-              action: inherit
-            transfer_acl:
-              action: inherit
-            use_forwarders_for_subzones:
-              action: inherit
-            zone_authority:
-              default_ttl:
-                action: inherit
-              expire:
-                action: inherit
-              mname_block:
-                action: inherit
-              negative_ttl:
-                action: inherit
-              refresh:
-                action: inherit
-              retry:
-                action: inherit
-              rname:
-                action: inherit
     - name: Get information about the IP space
       infoblox.bloxone.ipam_ip_space_info:
         filters:
@@ -819,9 +814,9 @@
           - view_info.objects | length == 1
           - view_info.objects[0].id == view.id
           - view_info.objects[0].sort_list[0].element == "any"
-          - view_info.objects[0].sort_list[0].prioritized_networks == "192.168.12.12"
+          - view_info.objects[0].sort_list[0].prioritized_networks[0] == "192.168.12.12"
           - view_info.objects[0].sort_list[1].element == "ip"
-          - view_info.objects[0].sort_list[1].prioritized_networks == "192.168.13.13"
+          - view_info.objects[0].sort_list[1].prioritized_networks[0] == "192.168.13.13"
           - view_info.objects[0].sort_list[1].source == "192.168.11.11"
 
     - name: Create a View and Synthesize Address Records From HTTPS
@@ -967,4 +962,10 @@
           - view_info.objects[0].zone_authority.mname == "test.b1ddi"
           - view_info.objects[0].zone_authority.use_default_mname == false
 
-
+  always:
+    # Cleanup if the test fails
+    - name: "Delete View"
+      infoblox.bloxone.dns_config_view:
+        name: "{{ name }}"
+        state: "absent"
+      ignore_errors: true

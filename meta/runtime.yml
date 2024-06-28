@@ -21,3 +21,11 @@ plugin_routing:
             deprecation:
                 removal_version: 3.0.0
                 warning_text: Use infoblox.bloxone.ipam_ip_space_info instead.
+        b1_dns_view:
+          deprecation:
+            removal_version: 3.0.0
+            warning_text: Use infoblox.bloxone.dns_config_view instead.
+        b1_dns_view_gather:
+          deprecation:
+            removal_version: 3.0.0
+            warning_text: Use infoblox.bloxone.dns_config_view_info instead.
