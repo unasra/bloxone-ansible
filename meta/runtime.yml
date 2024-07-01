@@ -5,8 +5,8 @@ action_groups:
           - ipam
           - dns_config
   dns_config:
-    - dns_config_view
-    - dns_config_view_info
+    - dns_view
+    - dns_view_info
   ipam:
     - ipam_ip_space
     - ipam_ip_space_info
@@ -24,8 +24,8 @@ plugin_routing:
         b1_dns_view:
           deprecation:
             removal_version: 3.0.0
-            warning_text: Use infoblox.bloxone.dns_config_view instead.
+            warning_text: Use infoblox.bloxone.dns_view instead.
         b1_dns_view_gather:
           deprecation:
             removal_version: 3.0.0
-            warning_text: Use infoblox.bloxone.dns_config_view_info instead.
+            warning_text: Use infoblox.bloxone.dns_view_info instead.

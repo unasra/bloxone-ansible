@@ -9,7 +9,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: dns_config_view
+module: dns_view
 short_description: Manage View
 description:
     - Manage View
@@ -1190,19 +1190,19 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
   - name: Create a view
-    infoblox.bloxone.dns_config_view:
+    infoblox.bloxone.dns_view:
       name: "view1"
       state: "present"
 
   - name: Create a view with tags
-    infoblox.bloxone.dns_config_view:
+    infoblox.bloxone.dns_view:
       name: "view1"
       state: "present"
       tags:
         location: "my-location"
 
   - name: Delete a view
-    infoblox.bloxone.dns_config_view:
+    infoblox.bloxone.dns_view:
       name: "view1"
       state: "absent"
 """  # noqa: E501

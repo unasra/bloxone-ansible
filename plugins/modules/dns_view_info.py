@@ -9,7 +9,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: dns_config_view_info
+module: dns_view_info
 short_description: Manage View
 description:
     - Manage View
@@ -58,20 +58,20 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
   - name: Get View information by ID
-    infoblox.bloxone.dns_config_view_info:
+    infoblox.bloxone.dns_view_info:
       id: "{{ view_id }}"
 
   - name: Get View information by filters (e.g. name)
-    infoblox.bloxone.dns_config_view_info:
+    infoblox.bloxone.dns_view_info:
       filters:
         name: "my-view"
 
   - name: Get View information by raw filter query
-    infoblox.bloxone.dns_config_view_info:
+    infoblox.bloxone.dns_view_info:
       filter_query: "name=='my-view'"
 
   - name: Get View information by tag filters
-    infoblox.bloxone.dns_config_view_info:
+    infoblox.bloxone.dns_view_info:
       tag_filters:
         location: "site-1"
 """  # noqa: E501
