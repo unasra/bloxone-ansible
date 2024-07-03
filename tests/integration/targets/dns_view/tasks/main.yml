@@ -544,10 +544,10 @@
             rname:
               action: inherit
     - name: Get information about the IP space
-      infoblox.bloxone.ipam_ip_space_info:
+      infoblox.bloxone.dns_view_info:
         filters:
           name: "{{ name }}"
-      register: ip_space_info
+      register: dns_view_info
     - assert:
         that:
           - view is not failed
