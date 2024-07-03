@@ -4,7 +4,7 @@ action_groups:
         extend_group:
           - ipam
           - dns
-  dns_config:
+  dns:
     - dns_view
     - dns_view_info
   ipam:
