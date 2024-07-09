@@ -3,8 +3,8 @@ action_groups:
     - metadata:
         extend_group:
           - ipam
-          - dns_config
-  dns_config:
+          - dns
+  dns:
     - dns_view
     - dns_view_info
     - dns_auth_zone
@@ -31,3 +31,11 @@ plugin_routing:
           deprecation:
             removal_version: 3.0.0
             warning_text: Use infoblox.bloxone.dns_view_info instead.
+        b1_dns_auth_zone:
+          deprecation:
+            removal_version: 3.0.0
+            warning_text: Use infoblox.bloxone.dns_auth_zone instead.
+        b1_dns_auth_zone_gather:
+          deprecation:
+            removal_version: 3.0.0
+            warning_text: Use infoblox.bloxone.dns_auth_zone_info instead.
