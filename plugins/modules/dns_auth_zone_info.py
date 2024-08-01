@@ -57,7 +57,24 @@ extends_documentation_fragment:
 """  # noqa: E501
 
 EXAMPLES = r"""
-"""
+  - name: Get Auth Zone information by ID
+    infoblox.bloxone.dns_auth_zone_info:
+      id: "{{ auth_zone_id }}"
+
+  - name: Get Auth Zone information by filters (e.g. name)
+    infoblox.bloxone.dns_auth_zone_info:
+      filters:
+        name: "example_zone"
+
+  - name: Get Auth Zone information by raw filter query
+    infoblox.bloxone.dns_auth_zone_info:
+      filter_query: "name=='example_zone'"
+
+  - name: Get Auth Zone information by tag filters
+    infoblox.bloxone.dns_auth_zone_info:
+      tag_filters:
+        location: "site-1"
+"""  # noqa: E501
 
 RETURN = r"""
 id:

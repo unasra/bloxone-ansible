@@ -628,7 +628,30 @@ extends_documentation_fragment:
 """  # noqa: E501
 
 EXAMPLES = r"""
-"""
+  - name: Create an Auth Zone
+    infoblox.bloxone.dns_auth_zone:
+      name: "example_zone"
+      state: "present"
+
+  - name: Create an Auth Zone with Additional Fields
+    infoblox.bloxone.dns_auth_zone:
+      name: "example_zone"
+      comment: "Example Auth Zone"
+      query_acl:
+        - access: "allow"
+          element: "ip"
+          address: "192.168.11.11"
+      gss_tsig_enabled: true
+      notify: true
+      state: "present"
+      tags:
+        location: "my-location"
+
+  - name: Delete the Zone
+    infoblox.bloxone.dns_auth_zone:
+      name: "example_zone"
+      state: "absent"
+"""  # noqa: E501
 
 RETURN = r"""
 id:
@@ -1992,7 +2015,7 @@ class AuthZoneModule(BloxoneAnsibleModule):
                     return None
                 raise e
         else:
-            filter = f"fqdn=='{self.params['fqdn']}' and primary_type=='{self.params['primary_type']}'"
+            filter = f"fqdn=='{self.params['fqdn']}'"
             resp = AuthZoneApi(self.client).list(filter=filter, inherit="full")
             if len(resp.results) == 1:
                 return resp.results[0]
@@ -2013,8 +2036,15 @@ class AuthZoneModule(BloxoneAnsibleModule):
             return None
 
         update_body = self.payload
-        update_body.fqdn = None
-        update_body.primary_type = None
+
+        if update_body.fqdn and update_body.fqdn != self.existing.fqdn:
+            update_body.fqdn = None
+        else:
+            self.fail_json(msg="fqdn cannot be updated")
+        if update_body.primary_type and update_body.primary_type != self.existing.primary_type:
+            update_body.primary_type = None
+        else:
+            self.fail_json(msg="primary_type cannot be updated")
 
         resp = AuthZoneApi(self.client).update(id=self.existing.id, body=update_body, inherit="full")
         return resp.result.model_dump(by_alias=True, exclude_none=True)

@@ -18,6 +18,7 @@
       infoblox.bloxone.dns_auth_zone:
         fqdn: "{{ fqdn }}"
         primary_type: external
+        view: "{{ _view.id }}"
         state: present
       check_mode: true
       register: auth_zone
@@ -36,6 +37,7 @@
       infoblox.bloxone.dns_auth_zone:
         fqdn: "{{ fqdn }}"
         primary_type: external
+        view: "{{ _view.id }}"
         state: present
       register: auth_zone
     - name: Get Information about the Auth Zone
@@ -124,6 +126,7 @@
       infoblox.bloxone.dns_auth_zone:
         fqdn: "{{ fqdn }}"
         primary_type: external
+        view: "{{ _view.id }}"
         state: absent
       register: auth_zone
     - assert:
@@ -135,6 +138,8 @@
       infoblox.bloxone.dns_auth_zone:
         fqdn: "{{ fqdn }}"
         primary_type: cloud
+        comment: "Test Comment"
+        view: "{{ _view.id }}"
         tags:
           location: "site-1"
         state: present

@@ -12,5 +12,4 @@
       infoblox.bloxone.dns_view:
         name: "{{ name }}"
         state: present
-      check_mode: true
       register: _view
