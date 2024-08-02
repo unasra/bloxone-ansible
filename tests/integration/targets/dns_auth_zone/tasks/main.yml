@@ -463,3 +463,10 @@
         fqdn: "{{ fqdn }}"
         state: "absent"
       ignore_errors: true
+
+    - name: "Delete the View"
+      infoblox.bloxone.dns_view:
+        name: "{{ name }}"
+        state: absent
+      register: _view
+      ignore_errors: true
