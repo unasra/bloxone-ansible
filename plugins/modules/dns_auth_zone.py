@@ -2036,15 +2036,7 @@ class AuthZoneModule(BloxoneAnsibleModule):
             return None
 
         update_body = self.payload
-
-        if update_body.fqdn and update_body.fqdn == self.existing.fqdn:
-            update_body.fqdn = None
-        else:
-            self.fail_json(msg="fqdn cannot be updated")
-        if update_body.primary_type and update_body.primary_type == self.existing.primary_type:
-            update_body.primary_type = None
-        else:
-            self.fail_json(msg="primary_type cannot be updated")
+        update_body = self.validate_readonly_on_update(self.existing,update_body,['fqdn','primary_type'])
 
         resp = AuthZoneApi(self.client).update(id=self.existing.id, body=update_body, inherit="full")
         return resp.result.model_dump(by_alias=True, exclude_none=True)
