@@ -67,64 +67,6 @@ EXAMPLES = r"""
       state: "absent"
 """
 
-RETURN = r"""
-id:
-    description:
-        - ID of the UIJoinToken object
-    type: str
-    returned: Always
-item:
-    description:
-        - UIJoinToken object
-    type: complex
-    returned: Always
-    contains:
-        deleted_at:
-            description: ""
-            type: str
-            returned: Always
-        description:
-            description: ""
-            type: str
-            returned: Always
-        expires_at:
-            description: ""
-            type: str
-            returned: Always
-        id:
-            description:
-                - "The resource identifier."
-            type: str
-            returned: Always
-        last_used_at:
-            description: ""
-            type: str
-            returned: Always
-        name:
-            description: ""
-            type: str
-            returned: Always
-        status:
-            description:
-                - "derived field, \"active\" when expires_at and deleted_at are null."
-            type: dict
-            returned: Always
-            contains:
-        tags:
-            description: ""
-            type: dict
-            returned: Always
-        token_id:
-            description:
-                - "first half of the token."
-            type: str
-            returned: Always
-        use_counter:
-            description: ""
-            type: int
-            returned: Always
-"""  # noqa: E501
-
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
