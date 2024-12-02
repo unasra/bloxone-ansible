@@ -1,0 +1,147 @@
+---
+- module_defaults:
+    group/infoblox.bloxone.all:
+      csp_url: "{{ csp_url }}"
+      api_key: "{{ api_key }}"
+
+  block:
+    # Create a random name to avoid conflicts
+    - ansible.builtin.set_fact:
+        name: "test-ui-join-token-{{ 999999 | random | string }}"
+        name2: "test-ui-join-token-{{ 999999 | random | string }}"
+      tags: test
+
+    - name: Create an UI Join Token (check mode)
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: present
+      check_mode: true
+      register: ui_join_token
+    - name: Get Information about the UI Join Token
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 0
+
+    - name: Create an UI Join Token
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: present
+      register: ui_join_token
+      tags: test
+    - name: Get Information about the UI Join Token
+      tags: test
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 1
+      tags: test
+
+    - name: Create an UI Join Token (idempotent)
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: present
+      register: ui_join_token
+    - assert:
+        that:
+          - ui_join_token is not changed
+          - ui_join_token is not failed
+
+    - name: Delete the UI Join Token (check mode)
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: absent
+      check_mode: true
+      register: ui_join_token
+    - name: Get Information about the UI Join Token
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 1
+
+    - name: Delete the UI Join Token
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: absent
+      register: ui_join_token
+      tags: test
+    - name: Get Information about the UI Join Token
+      tags: test
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 0
+      tags: test
+
+    - name: Delete the UI Join Token (idempotent)
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
+        state: absent
+      register: ui_join_token
+    - assert:
+        that:
+          - ui_join_token is not changed
+          - ui_join_token is not failed
+
+    - name: Create an UI Join Token with Description
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name2 }}"
+        description: "Test UI Join Token"
+        state: present
+      register: ui_join_token
+    - name: Get Information about the UI Join Token
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name2 }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 1
+
+    - name: Create an UI Join Token with Tags
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name2 }}"
+        description: "Test UI Join Token"
+        tags:
+          location: "site-1"
+        state: present
+      register: ui_join_token
+    - name: Get Information about the UI Join Token
+      infoblox.bloxone.infra_join_token_info:
+        filters:
+          name: "{{ name2 }}"
+      register: ui_join_token_info
+    - assert:
+        that:
+          - ui_join_token is changed
+          - ui_join_token_info is not failed
+          - ui_join_token_info.objects | length == 1
+
+  always:
+    - name: "Clean up the Join Token"
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name2 }}"
+        state: absent
+      ignore_errors: true
