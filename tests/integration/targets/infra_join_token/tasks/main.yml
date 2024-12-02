@@ -9,9 +9,8 @@
     - ansible.builtin.set_fact:
         name: "test-ui-join-token-{{ 999999 | random | string }}"
         name2: "test-ui-join-token-{{ 999999 | random | string }}"
-      tags: test
 
-    - name: Create an UI Join Token (check mode)
+    - name: Create a UI Join Token (check mode)
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: present
@@ -28,14 +27,12 @@
           - ui_join_token_info is not failed
           - ui_join_token_info.objects | length == 0
 
-    - name: Create an UI Join Token
+    - name: Create a UI Join Token
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: present
       register: ui_join_token
-      tags: test
     - name: Get Information about the UI Join Token
-      tags: test
       infoblox.bloxone.infra_join_token_info:
         filters:
           name: "{{ name }}"
@@ -45,9 +42,8 @@
           - ui_join_token is changed
           - ui_join_token_info is not failed
           - ui_join_token_info.objects | length == 1
-      tags: test
 
-    - name: Create an UI Join Token (idempotent)
+    - name: Create a UI Join Token (idempotent)
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: present
@@ -79,9 +75,7 @@
         name: "{{ name }}"
         state: absent
       register: ui_join_token
-      tags: test
     - name: Get Information about the UI Join Token
-      tags: test
       infoblox.bloxone.infra_join_token_info:
         filters:
           name: "{{ name }}"
@@ -91,7 +85,7 @@
           - ui_join_token is changed
           - ui_join_token_info is not failed
           - ui_join_token_info.objects | length == 0
-      tags: test
+      
 
     - name: Delete the UI Join Token (idempotent)
       infoblox.bloxone.infra_join_token:
@@ -103,7 +97,7 @@
           - ui_join_token is not changed
           - ui_join_token is not failed
 
-    - name: Create an UI Join Token with Description
+    - name: Create a UI Join Token with Description
       infoblox.bloxone.infra_join_token:
         name: "{{ name2 }}"
         description: "Test UI Join Token"
@@ -120,7 +114,7 @@
           - ui_join_token_info is not failed
           - ui_join_token_info.objects | length == 1
 
-    - name: Create an UI Join Token with Tags
+    - name: Create a UI Join Token with Tags
       infoblox.bloxone.infra_join_token:
         name: "{{ name2 }}"
         description: "Test UI Join Token"

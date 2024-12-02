@@ -9,7 +9,7 @@
         name: "test-ui-join-token-{{ 999999 | random | string }}"
         tag_value: "site-{{ 999999 | random | string }}"
 
-    - name: Create an UI Join Token
+    - name: Create a UI Join Token
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         tags:
@@ -36,7 +36,7 @@
           - ui_join_token_info.objects | length == 1
           - ui_join_token_info.objects[0].id == ui_join_token.id
 
-    - name: Get Information about the UI Join Token by tag filter
+    - name: Get Information about the UI Join Token by a tag filter
       infoblox.bloxone.infra_join_token_info:
         tag_filters:
           location: "{{ tag_value }}"
