@@ -10,9 +10,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: infra_join_token_info
-short_description: Manage UIJoinToken
+short_description: Manage JoinToken
 description:
-    - Manage UIJoinToken
+    - Manage JoinToken
 version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
@@ -47,20 +47,20 @@ extends_documentation_fragment:
 """  # noqa: E501
 
 EXAMPLES = r"""
-  - name: Get UI Join Token information by ID
+  - name: Get Join Token information by ID
     infoblox.bloxone.infra_join_token_info:
       id: "{{ join_token_id }}"
 
-  - name: Get a UI Join Token information by filters (e.g. name)
+  - name: Get a Join Token information by filters (e.g. name)
     infoblox.bloxone.infra_join_token_info:
       filters:
         name: "example_token"
 
-  - name: Get a UI Join Token information by raw filter query
+  - name: Get a Join Token information by raw filter query
     infoblox.bloxone.infra_join_token_info:
       filter_query: "name=='example_token'"
 
-  - name: Get a UI Join Token information by tag filters
+  - name: Get a Join Token information by tag filters
     infoblox.bloxone.infra_join_token_info:
       tag_filters:
         location: "site-1"
@@ -75,9 +75,9 @@ except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
 
-class UIJoinTokenInfoModule(BloxoneAnsibleModule):
+class JoinTokenInfoModule(BloxoneAnsibleModule):
     def __init__(self, *args, **kwargs):
-        super(UIJoinTokenInfoModule, self).__init__(*args, **kwargs)
+        super(JoinTokenInfoModule, self).__init__(*args, **kwargs)
         self._existing = None
         self._limit = 1000
 
@@ -157,7 +157,7 @@ def main():
         tag_filter_query=dict(type="str", required=False),
     )
 
-    module = UIJoinTokenInfoModule(
+    module = JoinTokenInfoModule(
         argument_spec=module_args,
         supports_check_mode=True,
         mutually_exclusive=[

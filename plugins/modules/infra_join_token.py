@@ -11,9 +11,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: infra_join_token
-short_description: Manage UIJoinToken
+short_description: Manage JoinToken
 description:
-    - Manage UIJoinToken
+    - Manage JoinToken
 version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
@@ -29,19 +29,23 @@ options:
         required: false
         choices:
             - present
-            - absent
+            - revoked
         default: present
     description:
-        description: ""
+        description:
+            - Description of the Join Token
         type: str
     expires_at:
-        description: ""
+        description:
+            - Expiration time of the Join Token
         type: str
     name:
-        description: ""
+        description:
+            - Name of the Join Token
         type: str
     tags:
-        description: ""
+        description:
+            - Tags of the Join Token
         type: dict
 
 extends_documentation_fragment:
@@ -49,22 +53,22 @@ extends_documentation_fragment:
 """  # noqa: E501
 
 EXAMPLES = r"""
-  - name: Create a UI Join token
+  - name: Create a Join token
     infoblox.bloxone.infra_join_token:
       name: "example_token"
       state: "present"
 
-  - name: Create a UI Join Token with Additional Fields
+  - name: Create a Join Token with Additional Fields
     infoblox.bloxone.infra_join_token:
       name: "example_token"
       description: "Example Join Token"
       tags:
         location: "my-location"
 
-  - name: Delete a UI Join token
+  - name: Revoke a Join token
     infoblox.bloxone.infra_join_token:
       name: "example_token"
-      state: "absent"
+      state: "revoked"
 """
 
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
@@ -76,9 +80,9 @@ except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
 
-class UIJoinTokenModule(BloxoneAnsibleModule):
+class JoinTokenModule(BloxoneAnsibleModule):
     def __init__(self, *args, **kwargs):
-        super(UIJoinTokenModule, self).__init__(*args, **kwargs)
+        super(JoinTokenModule, self).__init__(*args, **kwargs)
 
         exclude = ["state", "csp_url", "api_key", "id"]
         self._payload_params = {k: v for k, v in self.params.items() if v is not None and k not in exclude}
@@ -114,7 +118,7 @@ class UIJoinTokenModule(BloxoneAnsibleModule):
                 resp = UIJoinTokenApi(self.client).read(self.params["id"])
                 return resp.result
             except NotFoundException as e:
-                if self.params["state"] == "absent":
+                if self.params["state"] == "revoked":
                     return None
                 raise e
         else:
@@ -171,16 +175,16 @@ class UIJoinTokenModule(BloxoneAnsibleModule):
             if self.params["state"] == "present" and self.existing is None:
                 item = self.create()
                 result["changed"] = True
-                result["msg"] = "UIJoinToken created"
+                result["msg"] = "JoinToken created"
             elif self.params["state"] == "present" and self.existing is not None:
                 if self.payload_changed():
                     item = self.update()
                     result["changed"] = True
-                    result["msg"] = "UIJoinToken updated"
-            elif self.params["state"] == "absent" and self.existing is not None:
+                    result["msg"] = "JoinToken updated"
+            elif self.params["state"] == "revoked" and self.existing is not None:
                 self.delete()
                 result["changed"] = True
-                result["msg"] = "UIJoinToken deleted"
+                result["msg"] = "JoinToken Revoked"
 
             if self.check_mode:
                 # if in check mode, do not update the result or the diff, just return the changed state
@@ -203,14 +207,14 @@ class UIJoinTokenModule(BloxoneAnsibleModule):
 def main():
     module_args = dict(
         id=dict(type="str", required=False),
-        state=dict(type="str", required=False, choices=["present", "absent"], default="present"),
+        state=dict(type="str", required=False, choices=["present", "revoked"], default="present"),
         description=dict(type="str"),
         expires_at=dict(type="str"),
         name=dict(type="str"),
         tags=dict(type="dict"),
     )
 
-    module = UIJoinTokenModule(
+    module = JoinTokenModule(
         argument_spec=module_args,
         supports_check_mode=True,
         required_if=[("state", "present", ["name"])],
