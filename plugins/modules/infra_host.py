@@ -7,8 +7,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-import time
-
 DOCUMENTATION = r"""
 ---
 module: infra_host
@@ -67,6 +65,27 @@ options:
 extends_documentation_fragment:
     - infoblox.bloxone.common
 """  # noqa: E501
+
+EXAMPLES = r"""
+  - name: Create a host
+    infoblox.bloxone.infra_host:
+      display_name: "example_host"
+      state: "present"
+
+  - name: Create a host with Additional Fields
+    infoblox.bloxone.infra_host:
+      name: "example_host"
+      description: "Example Infra Host"
+      maintenance_mode: enabled
+      state: "present"
+      tags:
+        location: "my-location"
+
+  - name: Delete the host
+    infoblox.bloxone.infra_host:
+      display_name: "example_host"
+      state: "absent"
+"""
 
 RETURN = r"""
 id:

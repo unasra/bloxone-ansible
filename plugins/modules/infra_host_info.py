@@ -56,6 +56,26 @@ extends_documentation_fragment:
     - infoblox.bloxone.common
 """  # noqa: E501
 
+EXAMPLES = r"""
+  - name: Get Host information by ID
+    infoblox.bloxone.infra_host_info:
+      id: "{{ host_id }}"
+
+  - name: Get Host information by filters (e.g. display name)
+    infoblox.bloxone.infra_host_info:
+      filters:
+        display_name: "example_host"
+
+  - name: Get Host information by raw filter query
+    infoblox.bloxone.infra_host_info:
+      filter_query: "display_name=='example_host'"
+
+  - name: Get Host information by tag filters
+    infoblox.bloxone.infra_host_info:
+      tag_filters:
+        location: "site-1"
+"""
+
 RETURN = r"""
 id:
     description:
