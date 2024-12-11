@@ -374,7 +374,9 @@ class HostsModule(BloxoneAnsibleModule):
                 after=item,
             )
             result["object"] = item
-            result["id"] = self.existing.id if self.existing is not None else item["id"] if (item and "id" in item) else None
+            result["id"] = (
+                self.existing.id if self.existing is not None else item["id"] if (item and "id" in item) else None
+            )
         except ApiException as e:
             self.fail_json(msg=f"Failed to execute command: {e.status} {e.reason} {e.body}")
 
@@ -393,7 +395,6 @@ def main():
         pool_id=dict(type="str"),
         serial_number=dict(type="str"),
         tags=dict(type="dict"),
-
     )
 
     module = HostsModule(
