@@ -129,11 +129,6 @@ class JoinTokenModule(BloxoneAnsibleModule):
             if not resp.results:
                 resp.results = []
 
-            # If result is REVOKED, remove it from the list
-            for i in resp.results:
-                if i.status == "REVOKED":
-                    resp.results.pop(resp.results.index(i))
-
             if len(resp.results) == 1:
                 return resp.results[0]
             if len(resp.results) > 1:
@@ -181,9 +176,13 @@ class JoinTokenModule(BloxoneAnsibleModule):
                     item = self.update()
                     result["changed"] = True
                     result["msg"] = "JoinToken updated"
-            elif self.params["state"] == "revoked" and self.existing is not None:
+            elif self.params["state"] == "revoked" and self.existing is not None and self.existing.status != "REVOKED":
                 self.delete()
                 result["changed"] = True
+                result["msg"] = "JoinToken Revoked"
+            elif self.params["state"] == "revoked" and self.existing is not None and self.existing.status == "REVOKED":
+                self.delete()
+                result["changed"] = False
                 result["msg"] = "JoinToken Revoked"
 
             if self.check_mode:

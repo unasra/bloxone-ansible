@@ -115,11 +115,6 @@ class JoinTokenInfoModule(BloxoneAnsibleModule):
                 if not resp.results:
                     resp.results = []
 
-                # Removes REVOKED tokens from the list
-                for i in resp.results:
-                    if i.status == "REVOKED":
-                        resp.results.pop(resp.results.index(i))
-
                 all_results.extend(resp.results)
 
                 if len(resp.results) < self._limit:

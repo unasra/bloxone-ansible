@@ -84,7 +84,8 @@
         that:
           - join_token is changed
           - join_token_info is not failed
-          - join_token_info.objects | length == 0
+          # The join token is revoked , not deleted , hence the length would be 1
+          - join_token_info.objects | length == 1
       
 
     - name: Delete the Join Token (idempotent)
