@@ -181,7 +181,6 @@ class JoinTokenModule(BloxoneAnsibleModule):
                 result["changed"] = True
                 result["msg"] = "JoinToken Revoked"
             elif self.params["state"] == "revoked" and self.existing is not None and self.existing.status == "REVOKED":
-                self.delete()
                 result["changed"] = False
                 result["msg"] = "JoinToken Revoked"
 

@@ -53,7 +53,7 @@
           - join_token is not changed
           - join_token is not failed
 
-    - name: Delete the Join Token (check mode)
+    - name: Revoke the Join Token (check mode)
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: revoked
@@ -69,8 +69,9 @@
           - join_token is changed
           - join_token_info is not failed
           - join_token_info.objects | length == 1
+          - join_token_info.objects[0].status == "ACTIVE"
 
-    - name: Delete the Join Token
+    - name: Revoke the Join Token
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: revoked
@@ -86,9 +87,10 @@
           - join_token_info is not failed
           # The join token is revoked , not deleted , hence the length would be 1
           - join_token_info.objects | length == 1
+          - join_token_info.objects[0].status == "REVOKED"
       
 
-    - name: Delete the Join Token (idempotent)
+    - name: Revoke the Join Token (idempotent)
       infoblox.bloxone.infra_join_token:
         name: "{{ name }}"
         state: revoked
@@ -135,8 +137,14 @@
           - join_token_info.objects | length == 1
 
   always:
-    - name: "Clean up the Join Token"
+    - name: "Clean up the second Join Token"
       infoblox.bloxone.infra_join_token:
         name: "{{ name2 }}"
+        state: revoked
+      ignore_errors: true
+
+    - name: "Clean up the first Join Token"
+      infoblox.bloxone.infra_join_token:
+        name: "{{ name }}"
         state: revoked
       ignore_errors: true
