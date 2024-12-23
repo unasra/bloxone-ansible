@@ -25,7 +25,6 @@
       infoblox.bloxone.dns_delegation_info:
         filters:
           fqdn: "{{ delegation_fqdn }}"
-          view: "{{ _view.id }}"
       register: delegation_info
     - assert:
         that:
