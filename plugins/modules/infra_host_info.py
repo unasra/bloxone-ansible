@@ -7,6 +7,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+import re
+import time
+
 DOCUMENTATION = r"""
 ---
 module: infra_host_info
@@ -49,6 +52,18 @@ options:
     tag_filter_query:
         description:
             - Filter query to filter objects by tags
+        type: str
+        required: false
+    retry_if_not_found:
+        description:
+            - If set to I(true), it will retry until a matching host is found, or until the Timeout expires
+        type: bool
+        required: false
+    timeout:
+        description:
+            - The maximum time to wait for a matching host to be found.
+            - Valid time units are I(s) (seconds), I(m) (minutes), I(h) (hours). 
+            - Default is 20m.
         type: str
         required: false
 
@@ -305,7 +320,10 @@ class HostsInfoModule(BloxoneAnsibleModule):
         all_results = []
         offset = 0
 
-        while True:
+        timeout = parse_duration(self.params["timeout"])  # default set to 20 minutes
+        start_time  = time.time()
+
+        while time.time() < timeout + start_time:
             try:
                 resp = HostsApi(self.client).list(
                     offset=offset, limit=self._limit, filter=filter_str, tfilter=tag_filter_str
@@ -318,7 +336,10 @@ class HostsInfoModule(BloxoneAnsibleModule):
                 all_results.extend(resp.results)
 
                 if len(resp.results) < self._limit:
-                    break
+                    if self.params["retry_if_not_found"] and not all_results:
+                        continue
+                    else:
+                        break
                 offset += self._limit
 
             except ApiException as e:
@@ -351,6 +372,8 @@ def main():
         inherit=dict(type="str", required=False, choices=["full", "partial", "none"], default="full"),
         tag_filters=dict(type="dict", required=False),
         tag_filter_query=dict(type="str", required=False),
+        retry_if_not_found = dict(type="bool", required=False, default=False),
+        timeout = dict(type="str", required=False , default="20m"),
     )
 
     module = HostsInfoModule(
@@ -363,6 +386,21 @@ def main():
     )
     module.run_command()
 
+def parse_duration(duration_str):
+    # Match number followed by 's' for seconds , 'm' for minutes or 'h' for hours
+    match = re.match(r"(\d+)([smh])", duration_str)
+    if not match:
+        raise ValueError("Invalid format for timeout")
+
+    value, unit = match.groups()
+    value = int(value)
+
+    if unit == 's':
+        return value
+    elif unit == 'm':
+        return value*60
+    elif unit == 'h':
+        return value*60*60
 
 if __name__ == "__main__":
     main()

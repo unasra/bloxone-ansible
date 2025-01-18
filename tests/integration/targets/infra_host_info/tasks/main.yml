@@ -55,6 +55,19 @@
           - infra_host_info.objects | length == 1
           - infra_host_info.objects[0].id == infra_host.id
 
+    # The following test will not retrieve any result as the display_name is incorrect
+    # This test is added to demonstrate the retry_if_not_found and timeout options
+    - name: Get Information about the Host by using Retry if not found and Timeout
+      infoblox.bloxone.infra_host_info:
+        filters:
+          display_name: "{{ display_name }}+incorrect_name"
+        retry_if_not_found: true
+        timeout: "15s" # Timeout is set to 15 seconds
+      register: infra_host_info
+    - assert:
+        that:
+          - infra_host_info.objects | length == 0
+
   always:
     # Cleanup if the test fails
     - name: "Delete Host"
