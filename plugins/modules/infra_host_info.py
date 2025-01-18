@@ -277,10 +277,10 @@ objects:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
-
 import re
 import time
+
+from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
     from bloxone_client import ApiException, NotFoundException
