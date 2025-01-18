@@ -56,6 +56,26 @@ extends_documentation_fragment:
     - infoblox.bloxone.common
 """  # noqa: E501
 
+EXAMPLES = r"""
+    - name: Get Service Information by ID
+      infoblox.bloxone.infra_service_info:
+        id: "{{ service.id }}"
+
+    - name: Get Service information by filters (Display Name)
+      infoblox.bloxone.infra_service_info:
+        filters:
+          service_name: "example_service"
+
+    - name: Get Service information by filter query
+      infoblox.bloxone.infra_service_info:
+        filter_query: "service_name=='example_service'"
+
+    - name: Get Service information by tag filters
+      infoblox.bloxone.infra_service_info:
+        tag_filters:
+          location: "site-1"
+"""
+
 RETURN = r"""
 id:
     description:

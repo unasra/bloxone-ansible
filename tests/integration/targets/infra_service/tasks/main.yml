@@ -7,7 +7,6 @@
     # Create a random Service name to avoid conflicts
     - ansible.builtin.set_fact:
         service_name: "test-infra-service-{{ 999999 | random | string }}"
-      tags: run
 
     - name: Create a Service (check mode)
       infoblox.bloxone.infra_service:
@@ -190,7 +189,6 @@
 
 
     - name: Create a Service with Tags
-      tags: run
       infoblox.bloxone.infra_service:
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
@@ -214,7 +212,6 @@
   always:
     # Cleanup if the test fails
     - name: "Delete the Service"
-      tags: run
       infoblox.bloxone.infra_service:
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"

@@ -68,6 +68,43 @@ extends_documentation_fragment:
     - infoblox.bloxone.common
 """  # noqa: E501
 
+EXAMPLES = r"""
+  - name: Create a host
+    infoblox.bloxone.infra_host:
+      display_name: "example_host"
+      state: "present"
+    register: infra_host
+
+  - name: Create a service
+    infoblox.bloxone.infra_service:
+      name: "example_service"
+      service_type: "dns"
+      pool_id: "{{ infra_host.object.pool_id }}"
+      state: "present"
+
+  - name: Create a Service with Additional Fields
+    infoblox.bloxone.infra_service:
+      name: "example_service"
+      description: "Example Infra Service"
+      service_type: "dns"
+      pool_id: " {{ infra_host.object.pool_id }}"
+      desired_version: "3.4.0"
+      desired_state: "start"
+      interface_labels:
+        - "WAN"
+        - "label1"
+      state: "present"
+      tags:
+        location: "site-1"
+
+  - name: Delete the Service
+    infoblox.bloxone.infra_service:
+      name: "example_service"
+      service_type: "dns"
+      pool_id: "{{ infra_host.object.pool_id }}"
+      state: "absent"
+"""
+
 RETURN = r"""
 id:
     description:
