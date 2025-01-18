@@ -7,9 +7,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-import re
-import time
-
 DOCUMENTATION = r"""
 ---
 module: infra_host_info
@@ -59,13 +56,14 @@ options:
             - If set to I(true), it will retry until a matching host is found, or until the Timeout expires
         type: bool
         required: false
+        default: false
     timeout:
         description:
             - The maximum time to wait for a matching host to be found.
             - Valid time units are I(s) (seconds), I(m) (minutes), I(h) (hours). 
-            - Default is 20m.
         type: str
         required: false
+        default: 20m
 
 extends_documentation_fragment:
     - infoblox.bloxone.common
@@ -281,6 +279,9 @@ objects:
 
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
+import re
+import time
+
 try:
     from bloxone_client import ApiException, NotFoundException
     from infra_mgmt import HostsApi
@@ -321,7 +322,7 @@ class HostsInfoModule(BloxoneAnsibleModule):
         offset = 0
 
         timeout = parse_duration(self.params["timeout"])  # default set to 20 minutes
-        start_time  = time.time()
+        start_time = time.time()
 
         while time.time() < timeout + start_time:
             try:
@@ -372,8 +373,8 @@ def main():
         inherit=dict(type="str", required=False, choices=["full", "partial", "none"], default="full"),
         tag_filters=dict(type="dict", required=False),
         tag_filter_query=dict(type="str", required=False),
-        retry_if_not_found = dict(type="bool", required=False, default=False),
-        timeout = dict(type="str", required=False , default="20m"),
+        retry_if_not_found=dict(type="bool", required=False, default=False),
+        timeout=dict(type="str", required=False, default="20m"),
     )
 
     module = HostsInfoModule(
@@ -386,6 +387,7 @@ def main():
     )
     module.run_command()
 
+
 def parse_duration(duration_str):
     # Match number followed by 's' for seconds , 'm' for minutes or 'h' for hours
     match = re.match(r"(\d+)([smh])", duration_str)
@@ -395,12 +397,13 @@ def parse_duration(duration_str):
     value, unit = match.groups()
     value = int(value)
 
-    if unit == 's':
+    if unit == "s":
         return value
-    elif unit == 'm':
-        return value*60
-    elif unit == 'h':
-        return value*60*60
+    elif unit == "m":
+        return value * 60
+    elif unit == "h":
+        return value * 60 * 60
+
 
 if __name__ == "__main__":
     main()
