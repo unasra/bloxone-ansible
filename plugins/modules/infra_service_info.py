@@ -10,9 +10,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: infra_service_info
-short_description: Retrieve Infra Services
+short_description: Retrieve Infrastructure Services
 description:
-    - Retrieve Infra Services
+    - Retrieve Infrastructure Services
 version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:

@@ -10,9 +10,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: infra_service
-short_description: Manage Infra Services
+short_description: Manage Infrastructure Services
 description:
-    - Manage Infra Services
+    - Manage Infrastructure Services
 version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:

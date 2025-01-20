@@ -10,9 +10,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: infra_host
-short_description: Manage Hosts
+short_description: Manage Infrastructure Hosts
 description:
-    - Manage Hosts
+    - Manage Infrastructure Hosts
 version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
