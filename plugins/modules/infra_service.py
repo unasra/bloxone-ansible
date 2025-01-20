@@ -36,8 +36,12 @@ options:
         type: str
     desired_state:
         description:
-            - "The desired state of the Service. Should either be C(\"\"start\"\") or C(\"\"stop\"\")."
+            - "The desired state of the Service."
         type: str
+        choices:
+            - start
+            - stop
+        default: stop
     desired_version:
         description:
             - "The desired version of the Service."
@@ -63,6 +67,20 @@ options:
         description:
             - "Tags associated with this Service."
         type: dict
+    timeout:
+        description:
+            - The maximum duration to wait before being considered a timeout during create/update operations.
+            - Valid time units are I(s) (seconds), I(m) (minutes), I(h) (hours). 
+        type: str
+        required: false
+        default: 20m
+    wait_for_state:
+        description:
+            - If set to I(true), the resource will wait for the desired state to be reached before returning.
+            - If set to I(false), the resource will return immediately after the request is processed by the API.
+        type: bool
+        default: true
+        required: false
 
 extends_documentation_fragment:
     - infoblox.bloxone.common
@@ -216,18 +234,20 @@ item:
             returned: Always
 """  # noqa: E501
 
+import time
+
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
     from bloxone_client import ApiException, NotFoundException
-    from infra_mgmt import Service, ServicesApi
+    from infra_mgmt import DetailApi, Service, ServicesApi
 except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
 
-class ServicesModule(BloxoneAnsibleModule):
+class InfraServiceModule(BloxoneAnsibleModule):
     def __init__(self, *args, **kwargs):
-        super(ServicesModule, self).__init__(*args, **kwargs)
+        super(InfraServiceModule, self).__init__(*args, **kwargs)
 
         exclude = ["state", "csp_url", "api_key", "id"]
         self._payload_params = {k: v for k, v in self.params.items() if v is not None and k not in exclude}
@@ -257,7 +277,7 @@ class ServicesModule(BloxoneAnsibleModule):
 
         return self.is_changed(self.existing.model_dump(by_alias=True, exclude_none=True), self.payload_params)
 
-    def find(self):
+    def find(self, filter):
         if self.params["id"] is not None:
             try:
                 resp = ServicesApi(self.client).read(self.params["id"], inherit="full")
@@ -267,7 +287,6 @@ class ServicesModule(BloxoneAnsibleModule):
                     return None
                 raise e
         else:
-            filter = f"name=='{self.params['name']}'"
             resp = ServicesApi(self.client).list(filter=filter)
 
             # If no results, set results to empty list
@@ -293,7 +312,6 @@ class ServicesModule(BloxoneAnsibleModule):
             return None
 
         update_body = self.payload
-        update_body = self.validate_readonly_on_update(self.existing, update_body, ["pool_id"])
 
         resp = ServicesApi(self.client).update(id=self.existing.id, body=update_body)
         return resp.result.model_dump(by_alias=True, exclude_none=True)
@@ -310,7 +328,8 @@ class ServicesModule(BloxoneAnsibleModule):
         # based on the state that is passed in, we will execute the appropriate
         # functions
         try:
-            self.existing = self.find()
+            filter = f"name=='{self.params['name']}'"
+            self.existing = self.find(filter)
             item = {}
             if self.params["state"] == "present" and self.existing is None:
                 item = self.create()
@@ -330,6 +349,10 @@ class ServicesModule(BloxoneAnsibleModule):
                 # if in check mode, do not update the result or the diff, just return the changed state
                 self.exit_json(**result)
 
+            if self.params["wait_for_state"] and self.params["state"] == "present":
+                # If wait_for_state is set, check the state of the service until desired state is reached
+                self.check_wait_for_state(filter)
+
             result["diff"] = dict(
                 before=self.existing.model_dump(by_alias=True, exclude_none=True) if self.existing is not None else {},
                 after=item,
@@ -343,22 +366,41 @@ class ServicesModule(BloxoneAnsibleModule):
 
         self.exit_json(**result)
 
+    def check_wait_for_state(self, filters):
+        timeout = self.parse_duration(self.params["timeout"])
+        start_time = time.time()
+        target_state = "running" if self.params["desired_state"] == "start" else "stopped"
+
+        while time.time() < timeout + start_time:
+            current_state = self.return_composite_state(filters)
+            if current_state == target_state:
+                return
+            time.sleep(1)
+
+        self.fail_json(msg=f"Timeout reached while waiting for state to be {target_state}")
+
+    def return_composite_state(self, filters):
+        resp = DetailApi(self.client).services_list(filter=filters)
+        return resp.results[0].composite_state
+
 
 def main():
     module_args = dict(
         id=dict(type="str", required=False),
         state=dict(type="str", required=False, choices=["present", "absent"], default="present"),
         description=dict(type="str"),
-        desired_state=dict(type="str"),
+        desired_state=dict(type="str", choices=["start", "stop"], default="stop"),
         desired_version=dict(type="str"),
         interface_labels=dict(type="list", elements="str"),
         name=dict(type="str"),
         pool_id=dict(type="str"),
         service_type=dict(type="str"),
         tags=dict(type="dict"),
+        timeout=dict(type="str", required=False, default="20m"),
+        wait_for_state=dict(type="bool", required=False, default=True),
     )
 
-    module = ServicesModule(
+    module = InfraServiceModule(
         argument_spec=module_args,
         supports_check_mode=True,
         required_if=[("state", "present", ["name", "pool_id", "service_type"])],

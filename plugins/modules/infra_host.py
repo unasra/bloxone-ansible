@@ -283,9 +283,9 @@ except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
 
-class HostsModule(BloxoneAnsibleModule):
+class InfraHostModule(BloxoneAnsibleModule):
     def __init__(self, *args, **kwargs):
-        super(HostsModule, self).__init__(*args, **kwargs)
+        super(InfraHostModule, self).__init__(*args, **kwargs)
 
         exclude = ["state", "csp_url", "api_key", "id"]
         self._payload_params = {k: v for k, v in self.params.items() if v is not None and k not in exclude}
@@ -416,7 +416,7 @@ def main():
         tags=dict(type="dict"),
     )
 
-    module = HostsModule(
+    module = InfraHostModule(
         argument_spec=module_args,
         supports_check_mode=True,
         required_if=[("state", "present", ["display_name"])],

@@ -6,6 +6,7 @@
   block:
     - name: "Delete Infra Host"
       infoblox.bloxone.infra_host:
-        name: "{{ display_name }}"
+        display_name: "{{ display_name }}"
+        serial_number: "{{ serial_number }}"
         state: "absent"
       ignore_errors: true

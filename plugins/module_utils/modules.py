@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+import re
 import traceback
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback, missing_required_lib
@@ -59,6 +60,22 @@ class BloxoneAnsibleModule(AnsibleModule):
             setattr(update_body, field, None)
 
         return update_body
+
+    def parse_duration(self, duration_str):
+        # Match number followed by 's' for seconds , 'm' for minutes or 'h' for hours
+        match = re.match(r"(\d+)([smh])", duration_str)
+        if not match:
+            raise ValueError("Invalid format for timeout")
+
+        value, unit = match.groups()
+        value = int(value)
+
+        if unit == "s":
+            return value
+        elif unit == "m":
+            return value * 60
+        elif unit == "h":
+            return value * 60 * 60
 
 
 def bloxone_client_common_argument_spec():
