@@ -38,7 +38,7 @@ options:
 EXAMPLES = """
 - name: fetch all IP Space objects
   ansible.builtin.set_fact:
-    ip_space: "{{ lookup('bloxone', '/ipam/ipspace' , filters={'name': 'vsethia-ip-space'}, tfilters={'Tagname': '<value>'}, fields=['id', 'name', 'comment'] , provider={'host': '{{host}}', 'api_key': '{{api_key}}'}) }}"
+    ip_space: "{{ lookup('bloxone', '/ipam/ipspace' , filters={'name': 'vsethia-ip-space'}, tfilters={'Tagname': '<value>'}, fields=['id', 'name', 'comment'] , provider={'host': '{{host}}', 'portal_key': '{{portal_key}}'}) }}"
 
 """  # noqa: E501
 
@@ -63,7 +63,7 @@ def get_object(obj_type, provider, filters, tfilters, fields):
     """Creating the GET API request for lookup"""
     try:
         host = provider["host"]
-        key = provider["api_key"]
+        key = provider["portal_key"]
     except KeyError:
         return (
             True,

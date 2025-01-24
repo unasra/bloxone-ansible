@@ -347,7 +347,7 @@ item:
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
-    from bloxone_client import ApiException, NotFoundException
+    from universal_ddi_client import ApiException, NotFoundException
     from ipam import Address, AddressApi
 except ImportError:
     pass  # Handled by BloxoneAnsibleModule
@@ -358,7 +358,7 @@ class AddressModule(BloxoneAnsibleModule):
         super(AddressModule, self).__init__(*args, **kwargs)
         self.next_available_id = self.params.get("next_available_id")
 
-        exclude = ["state", "csp_url", "api_key", "id", "next_available_id"]
+        exclude = ["state", "portal_url", "portal_key", "id", "next_available_id"]
         self._payload_params = {k: v for k, v in self.params.items() if v is not None and k not in exclude}
         self._payload = Address.from_dict(self._payload_params)
         self._existing = None
