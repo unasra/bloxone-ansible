@@ -280,7 +280,7 @@ class InfraServiceModule(BloxoneAnsibleModule):
     def find(self, filter):
         if self.params["id"] is not None:
             try:
-                resp = ServicesApi(self.client).read(self.params["id"], inherit="full")
+                resp = ServicesApi(self.client).read(self.params["id"])
                 return resp.result
             except NotFoundException as e:
                 if self.params["state"] == "absent":

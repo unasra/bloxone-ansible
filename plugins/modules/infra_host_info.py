@@ -31,16 +31,6 @@ options:
             - Filter query to filter objects
         type: str
         required: false
-    inherit:
-        description:
-            - Return inheritance information
-        type: str
-        required: false
-        choices:
-            - full
-            - partial
-            - none
-        default: full
     tag_filters:
         description:
             - Filter dict to filter objects by tags
@@ -51,19 +41,28 @@ options:
             - Filter query to filter objects by tags
         type: str
         required: false
-    retry_if_not_found:
+    retries:
         description:
             - If set to I(true), it will retry until a matching host is found, or until the Timeout expires
-        type: bool
+            - The expected retries to be set for NIOX-X host is 100 for the host to be discovered
+        type: int
         required: false
-        default: false
     timeout:
         description:
             - The maximum time to wait for a matching host to be found.
             - Valid time units are I(s) (seconds), I(m) (minutes), I(h) (hours). 
+        type: int
+        required: false
+    until:
+        description:
+            - Retry a task until a certain condition is met.
         type: str
         required: false
-        default: 20m
+    delay:
+        description:
+            - The time to wait between retries.
+        type: int
+        required: false
 
 extends_documentation_fragment:
     - infoblox.bloxone.common
@@ -277,9 +276,6 @@ objects:
             returned: Always
 """  # noqa: E501
 
-import re
-import time
-
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
@@ -297,7 +293,7 @@ class HostsInfoModule(BloxoneAnsibleModule):
 
     def find_by_id(self):
         try:
-            resp = HostsApi(self.client).read(self.params["id"], inherit="full")
+            resp = HostsApi(self.client).read(self.params["id"])
             return [resp.result]
         except NotFoundException as e:
             return None
@@ -321,10 +317,7 @@ class HostsInfoModule(BloxoneAnsibleModule):
         all_results = []
         offset = 0
 
-        timeout = parse_duration(self.params["timeout"])  # default set to 20 minutes
-        start_time = time.time()
-
-        while time.time() < timeout + start_time:
+        while True:
             try:
                 resp = HostsApi(self.client).list(
                     offset=offset, limit=self._limit, filter=filter_str, tfilter=tag_filter_str
@@ -337,10 +330,7 @@ class HostsInfoModule(BloxoneAnsibleModule):
                 all_results.extend(resp.results)
 
                 if len(resp.results) < self._limit:
-                    if self.params["retry_if_not_found"] and not all_results:
-                        continue
-                    else:
-                        break
+                    break
                 offset += self._limit
 
             except ApiException as e:
@@ -370,11 +360,12 @@ def main():
         id=dict(type="str", required=False),
         filters=dict(type="dict", required=False),
         filter_query=dict(type="str", required=False),
-        inherit=dict(type="str", required=False, choices=["full", "partial", "none"], default="full"),
         tag_filters=dict(type="dict", required=False),
         tag_filter_query=dict(type="str", required=False),
-        retry_if_not_found=dict(type="bool", required=False, default=False),
-        timeout=dict(type="str", required=False, default="20m"),
+        retries=dict(type="int", required=False),
+        timeout=dict(type="int", required=False),
+        until=dict(type="str", required=False),
+        delay=dict(type="int", required=False),
     )
 
     module = HostsInfoModule(
@@ -386,23 +377,6 @@ def main():
         ],
     )
     module.run_command()
-
-
-def parse_duration(duration_str):
-    # Match number followed by 's' for seconds , 'm' for minutes or 'h' for hours
-    match = re.match(r"(\d+)([smh])", duration_str)
-    if not match:
-        raise ValueError("Invalid format for timeout")
-
-    value, unit = match.groups()
-    value = int(value)
-
-    if unit == "s":
-        return value
-    elif unit == "m":
-        return value * 60
-    elif unit == "h":
-        return value * 60 * 60
 
 
 if __name__ == "__main__":
