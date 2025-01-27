@@ -18,6 +18,8 @@ action_groups:
     - dns_auth_nsg_info
     - dns_delegation
     - dns_delegation_info
+    - dns_record
+    - dns_record_info
 
   ipam:
     - ipam_ip_space
