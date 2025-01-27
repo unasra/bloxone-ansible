@@ -224,7 +224,7 @@ from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import Bl
 
 try:
     from bloxone_client import ApiException, NotFoundException
-    from infra_mgmt import DetailApi, Service, ServicesApi
+    from infra_mgmt import Service, ServicesApi
 except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
