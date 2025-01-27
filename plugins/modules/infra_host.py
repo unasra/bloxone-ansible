@@ -47,7 +47,10 @@ options:
             - "The resource identifier."
         type: str
     maintenance_mode:
-        description: ""
+        description: "The flag to indicate if the Host is in maintenance mode."
+        choices:
+            - enabled
+            - disabled
         type: str
     pool_id:
         description:
@@ -229,7 +232,7 @@ item:
             type: str
             returned: Always
         maintenance_mode:
-            description: ""
+            description: "The flag to indicate if the Host is in maintenance mode."
             type: str
             returned: Always
         nat_ip:
@@ -410,7 +413,7 @@ def main():
         display_name=dict(type="str"),
         ip_space=dict(type="str"),
         location_id=dict(type="str"),
-        maintenance_mode=dict(type="str"),
+        maintenance_mode=dict(type="str", choices=["enabled", "disabled"]),
         pool_id=dict(type="str"),
         serial_number=dict(type="str"),
         tags=dict(type="dict"),
