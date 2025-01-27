@@ -41,28 +41,6 @@ options:
             - Filter query to filter objects by tags
         type: str
         required: false
-    retries:
-        description:
-            - If set to I(true), it will retry until a matching host is found, or until the Timeout expires
-            - The expected retries to be set for NIOX-X host is 100 for the host to be discovered
-        type: int
-        required: false
-    timeout:
-        description:
-            - The maximum time to wait for a matching host to be found.
-            - Valid time units are I(s) (seconds), I(m) (minutes), I(h) (hours). 
-        type: int
-        required: false
-    until:
-        description:
-            - Retry a task until a certain condition is met.
-        type: str
-        required: false
-    delay:
-        description:
-            - The time to wait between retries.
-        type: int
-        required: false
 
 extends_documentation_fragment:
     - infoblox.bloxone.common
@@ -86,6 +64,15 @@ EXAMPLES = r"""
     infoblox.bloxone.infra_host_info:
       tag_filters:
         location: "site-1"
+        
+  - name: Get Information after Host is ready using retries and timeout
+    infoblox.bloxone.infra_host_info:
+      filters:
+        display_name: "example_host"
+    timeout: 10
+    retries: 5
+    delay: 1
+    until: "infra_host_info.objects | length == 1"
 """
 
 RETURN = r"""
@@ -362,10 +349,6 @@ def main():
         filter_query=dict(type="str", required=False),
         tag_filters=dict(type="dict", required=False),
         tag_filter_query=dict(type="str", required=False),
-        retries=dict(type="int", required=False),
-        timeout=dict(type="int", required=False),
-        until=dict(type="str", required=False),
-        delay=dict(type="int", required=False),
     )
 
     module = HostsInfoModule(

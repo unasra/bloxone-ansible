@@ -14,7 +14,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         tags:
           location: "{{ tag_value }}"
         state: present

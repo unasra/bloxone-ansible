@@ -32,7 +32,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dhcp"
-        wait_for_state: false
         state: present
       register: infra_service
     - name: Get Information about the Service
@@ -51,7 +50,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dhcp"
-        wait_for_state: false
         state: present
       register: infra_service
     - assert:
@@ -113,7 +111,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         description: "Test Service"
         state: present
       register: infra_service
@@ -134,7 +131,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         desired_state: "start"
         state: present
       register: infra_service
@@ -154,7 +150,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         desired_version: "3.4.0"
         state: present
       register: infra_service
@@ -174,7 +169,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         interface_labels:
           - "WAN"
           - "LAN"
@@ -199,7 +193,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         tags:
           location: "site-1"
         state: present
@@ -223,7 +216,6 @@
         name: "{{ service_name }}"
         pool_id: "{{ _infra_host.object.pool_id }}"
         service_type: "dns"
-        wait_for_state: false
         state: "absent"
       ignore_errors: true
 
