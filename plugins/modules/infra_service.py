@@ -346,6 +346,7 @@ class InfraServiceModule(BloxoneAnsibleModule):
 
         self.exit_json(**result)
 
+
 def main():
     module_args = dict(
         id=dict(type="str", required=False),
