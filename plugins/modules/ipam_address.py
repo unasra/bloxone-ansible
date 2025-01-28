@@ -347,8 +347,8 @@ item:
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
-    from universal_ddi_client import ApiException, NotFoundException
     from ipam import Address, AddressApi
+    from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 

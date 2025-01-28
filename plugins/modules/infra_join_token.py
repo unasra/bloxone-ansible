@@ -74,8 +74,8 @@ EXAMPLES = r"""
 from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
-    from universal_ddi_client import ApiException, NotFoundException
     from infra_provision import JoinToken, UIJoinTokenApi
+    from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
     pass  # Handled by BloxoneAnsibleModule
 
