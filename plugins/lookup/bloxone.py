@@ -38,7 +38,7 @@ options:
 EXAMPLES = """
 - name: fetch all IP Space objects
   ansible.builtin.set_fact:
-    ip_space: "{{ lookup('bloxone', '/ipam/ipspace' , filters={'name': 'vsethia-ip-space'}, tfilters={'Tagname': '<value>'}, fields=['id', 'name', 'comment'] , provider={'host': '{{host}}', 'portal_key': '{{portal_key}}'}) }}"
+    ip_space: "{{ lookup('bloxone', '/ipam/ipspace' , filters={'name': 'vsethia-ip-space'}, tfilters={'Tagname': '<value>'}, fields=['id', 'name', 'comment'] , provider={'host': '{{host}}', 'api_key': '{{api_key}}'}) }}"
 
 """  # noqa: E501
 
