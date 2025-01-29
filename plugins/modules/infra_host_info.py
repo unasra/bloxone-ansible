@@ -65,7 +65,7 @@ EXAMPLES = r"""
       tag_filters:
         location: "site-1"
 
-  - name: Get Information after Host is ready using retries and timeout
+  - name: Get Host Information with retries
     infoblox.bloxone.infra_host_info:
       filters:
         display_name: "example_host"
