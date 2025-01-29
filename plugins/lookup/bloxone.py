@@ -63,7 +63,7 @@ def get_object(obj_type, provider, filters, tfilters, fields):
     """Creating the GET API request for lookup"""
     try:
         host = provider["host"]
-        key = provider["portal_key"]
+        key = provider["api_key"]
     except KeyError:
         return (
             True,

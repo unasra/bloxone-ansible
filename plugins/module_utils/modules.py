@@ -64,11 +64,14 @@ class BloxoneAnsibleModule(AnsibleModule):
 def universal_ddi_client_common_argument_spec():
     return dict(
         portal_key=dict(
-            type="str", aliases=["infoblox_portal_key"], fallback=(env_fallback, ["INFOBLOX_PORTAL_KEY"]), no_log=True
+            type="str",
+            aliases=["infoblox_portal_key", "api_key"],
+            fallback=(env_fallback, ["INFOBLOX_PORTAL_KEY"]),
+            no_log=True,
         ),
         portal_url=dict(
             type="str",
-            aliases=["infoblox_portal_url"],
+            aliases=["infoblox_portal_url", "csp_url"],
             fallback=(env_fallback, ["INFOBLOX_PORTAL_URL"]),
             default="https://csp.infoblox.com",
         ),
