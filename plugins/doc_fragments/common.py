@@ -11,12 +11,12 @@ options:
         description:
           - The API token for authentication against Infoblox BloxOne API. If not set, the environment variable E(INFOBLOX_PORTAL_KEY) will be used.
         type: str
-        aliases: [ infoblox_portal_key ]
+        aliases: [ infoblox_portal_key, api_key ]
 
     portal_url:
         description:
           - The Infoblox Cloud Services Portal (CSP) URL. If not set, the environment variable E(INFOBLOX_PORTAL_URL) will be used.
         type: str
-        aliases: [ infoblox_portal_url ]
+        aliases: [ infoblox_portal_url, csp_url ]
         default: 'https://csp.infoblox.com'
 """
