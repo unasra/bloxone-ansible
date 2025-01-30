@@ -38,6 +38,10 @@ action_groups:
   infra:
     - infra_join_token
     - infra_join_token_info
+    - infra_host
+    - infra_host_info
+    - infra_service
+    - infra_service_info
 
 plugin_routing:
     modules:
