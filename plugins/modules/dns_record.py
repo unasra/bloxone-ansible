@@ -315,18 +315,18 @@ options:
         required: true
 
 extends_documentation_fragment:
-    - infoblox.bloxone.common
+    - infoblox.universal_ddi.common
 """  # noqa: E501
 
 EXAMPLES = r"""
     - name: Create a View (required as parent)
-      infoblox.bloxone.dns_view:
+      infoblox.universal_ddi.dns_view:
         name: "{{ dns_view_name }}"
         state: present
       register: _view 
         
     - name: Create an Auth Zone (required as parent) 
-      infoblox.bloxone.dns_auth_zone:
+      infoblox.universal_ddi.dns_auth_zone:
         fqdn: "example_zone"
         primary_type: "cloud"
         view: "{{ _view.id }}"
@@ -334,7 +334,7 @@ EXAMPLES = r"""
       register: _auth_zone
     
     - name: Create an A Record in an Auth Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         comment: "Example A Record"
         rdata:
@@ -343,7 +343,7 @@ EXAMPLES = r"""
         state: "present"        
         
     - name: Create an A Record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         name_in_zone: "example_a_record"
         comment: "Example A Record"
@@ -357,7 +357,7 @@ EXAMPLES = r"""
         state: "present"
         
     - name: Delete the A Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         name_in_zone: "example_a_record"
         rdata:
@@ -825,16 +825,16 @@ item:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
 
 try:
     from dns_data import Record, RecordApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by BloxoneAnsibleModule
+    pass  # Handled by UniversalDdiAnsibleModule
 
 
-class RecordModule(BloxoneAnsibleModule):
+class RecordModule(UniversalDdiAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(RecordModule, self).__init__(*args, **kwargs)
 
