@@ -1,60 +1,23 @@
-name: Publish Ansible Role to Galaxy
+name: Publish Ansible Collection   to Galaxy
 
 on:
   push:
     tags:
       - "v*"
-  workflow_dispatch:
 
 jobs:
-  generate-release-log:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
-
-      - name: Install dependencies
-        run: |
-          pip install antsibull-changelog yq
-        shell: bash
-
-#      - name: Get the version name from the tags
-#        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-
-      - name: Get the version from galaxy.yaml
-        run: |
-          VERSION=$(yq -r '.version' galaxy.yml)
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Generate release log (RST)
-        run: |
-          antsibull-changelog release -vvv --version "$RELEASE_VERSION"
-        shell: bash
-
-      - name: Upload RST release log
-        uses: actions/upload-artifact@v3
-        with:
-          name: CHANGELOG.rst
-          path: CHANGELOG.rst
-
-
   release:
     name: Publish to Ansible Galaxy
-    needs:
-      - generate-release-log
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Get the version name from the tags
+        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
 
       - name: Publish Collection to Ansible Galaxy
         uses: artis3n/ansible_galaxy_collection@v2
         with:
-          api_key: 'a321eecd8cf5c1a6e073508eeac093f854d79588'
+          api_key: '${{ secrets.GALAXY_API_KEY }}'
           galaxy_version: '${{ env.RELEASE_VERSION }}'

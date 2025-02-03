@@ -21,3 +21,10 @@ releases:
       - Create beow
       - Create meow
       release_summary: Initial release part 3
+  4.0.0:
+    changes:
+      major_changes:
+      - Create beow
+      - Create ceow
+      - Create deow
+      release_summary: Initial release part 4
