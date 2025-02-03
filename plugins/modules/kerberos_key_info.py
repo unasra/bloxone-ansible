@@ -117,16 +117,16 @@ objects:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import BloxoneAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
 
 try:
     from keys import KerberosApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by BloxoneAnsibleModule
+    pass  # Handled by UniversalDdiAnsibleModule
 
 
-class KerberosKeyInfoModule(BloxoneAnsibleModule):
+class KerberosKeyInfoModule(UniversalDdiAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(KerberosKeyInfoModule, self).__init__(*args, **kwargs)
         self._existing = None
