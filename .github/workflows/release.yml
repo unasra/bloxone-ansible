@@ -37,6 +37,12 @@ jobs:
           antsibull-changelog release -vvv --version "$RELEASE_VERSION"
         shell: bash
 
+      - name: Upload RST release log
+        uses: actions/upload-artifact@v3
+        with:
+          name: CHANGELOG.rst
+          path: CHANGELOG.rst
+
 
   release:
     name: Publish to Ansible Galaxy

@@ -16,8 +16,8 @@ releases:
       release_summary: Initial release part 2
   3.0.0:
     changes:
-      release_summary: Initial release part 3
       major_changes:
-      - Create meow
       - Create aeow
       - Create beow
+      - Create meow
+      release_summary: Initial release part 3
