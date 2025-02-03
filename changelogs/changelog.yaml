@@ -1,0 +1,7 @@
+releases:
+  1.0.0:
+    changes:
+    - major_changes:
+      - Create IP space
+      - Create View
+      - Create A record

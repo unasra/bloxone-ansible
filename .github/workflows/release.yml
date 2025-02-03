@@ -23,8 +23,14 @@ jobs:
           pip install antsibull-changelog yq
         shell: bash
 
-      - name: Get the version name from the tags
-        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+#      - name: Get the version name from the tags
+#        run: echo "RELEASE_VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Get the version from galaxy.yaml
+        run: |
+          VERSION=$(yq -r '.version' galaxy.yml)
+          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
+        shell: bash
 
       - name: Generate release log (RST)
         run: |
@@ -32,7 +38,7 @@ jobs:
         shell: bash
 
       - name: Upload RST release log
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: changelog-rst
           path: changelog-release.rst
