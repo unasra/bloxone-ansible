@@ -1,4 +1,10 @@
 releases:
+  2.0.0:
+    changes:
+    - major_changes:
+      - Create new IP space
+      - Create new View
+      - Create new
   1.0.0:
     changes:
     - major_changes:
