@@ -57,34 +57,25 @@ extends_documentation_fragment:
 """  # noqa: E501
 
 EXAMPLES = r"""
-  - name: Get A Record information by ID
-    infoblox.bloxone.a_record_info:
+  - name: Get Record information by ID
+    infoblox.bloxone.dns_record_info:
       id: "{{ a_record_id }}"
 
-  - name: Get A Record information by filters (e.g., name_in_zone)
-    infoblox.bloxone.a_record_info:
+  - name: Get Record information by filters 
+    infoblox.bloxone.dns_record_info:
       filters:
         name_in_zone: "example_a_record"
-        type: "A"
-
-  - name: Get A Record information by raw filter query
-    infoblox.bloxone.a_record_info:
-      filter_query: "name_in_zone=='example_a_record' and type=='A'"
-
-  - name: Get A Record information by filters (zone)
-    infoblox.bloxone.a_record_info:
-      filters:
         zone: "example_zone_id"
         type: "A"
 
-  - name: Get A Record information by raw filter query 
-    infoblox.bloxone.a_record_info:
-      filter_query: "zone=='example_zone_id' and type=='A'"
+  - name: Get Record information by raw filter query 
+    infoblox.bloxone.dns_record_info:
+      filter_query: "name_in_zone=='example_a_record' and zone=='example_zone_id' and type=='A'"
 
-  - name: Get A Record information by tag filters
-    infoblox.bloxone.a_record_info:
+  - name: Get Record information by tag filters
+    infoblox.bloxone.dns_record_info:
       tag_filters:
-        location: "site-1"
+        location: "site-1"   
 """  # noqa: E501
 
 RETURN = r"""
