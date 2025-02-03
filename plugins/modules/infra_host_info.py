@@ -13,7 +13,7 @@ module: infra_host_info
 short_description: Retrieve Infrastructure Hosts
 description:
     - Retrieve Infrastructure Hosts
-version_added: 1.0.0
+version_added: 2.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:
