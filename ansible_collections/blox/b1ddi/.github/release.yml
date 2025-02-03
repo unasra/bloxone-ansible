@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 jobs:
   generate-release-log:
@@ -59,5 +60,5 @@ jobs:
         uses: artis3n/ansible_galaxy_collection@v2
         with:
           api_key: '${{ secrets.GALAXY_API_KEY }}'
-          collection-name: 'infoblox.universal_ddi'
+          collection-name: 'blox.b1ddi'
           galaxy_version: '${{ env.RELEASE_VERSION }}'
