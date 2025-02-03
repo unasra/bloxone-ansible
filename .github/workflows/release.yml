@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate release log (RST)
         run: |
-          antsibull-changelog release -vvv --only-latest "$RELEASE_VERSION"
+          antsibull-changelog release -vvv --version "$RELEASE_VERSION"
         shell: bash
 
 
