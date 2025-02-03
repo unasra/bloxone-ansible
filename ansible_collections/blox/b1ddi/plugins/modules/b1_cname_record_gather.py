@@ -9,7 +9,7 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: b1_cname_record_gather
-author: "amishra2@infoblox"
+author: "amishra2@blox"
 short_description: Configure IP space on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:

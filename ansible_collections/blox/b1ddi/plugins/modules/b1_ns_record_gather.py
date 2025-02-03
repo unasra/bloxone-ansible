@@ -8,8 +8,8 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-module: b1_dns_view_gather
-author: "amishra2@infoblox, Sriram kanan"
+module: b1_ns_record_gather
+author: "amishra2@blox"
 short_description: Configure IP space on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:
@@ -65,18 +65,22 @@ from ansible.module_utils.basic import *
 from ..module_utils.b1ddi import Request, Utilities
 import json
 
-def get_dns_view_gather(data):
+def get_ns_record_gather(data):
     '''Fetches the BloxOne DDI IP Space object
     '''
     '''Fetches the BloxOne DDI IP Space object
     '''
     connector = Request(data['host'], data['api_key'])
 
-    endpoint = f'/api/ddi/v1/dns/view'
+    endpoint = f'/api/ddi/v1/dns/record'
 
     flag=0
     fields=data['fields']
     filters=data['filters']
+    if 'name' in filters:
+        filters['dns_name_in_zone'] = filters.pop('name')
+    if 'dname' in filters:
+        filters['dns_rdata'] = filters.pop('dname')
     if fields!=None and isinstance(fields, list):
         temp_fields = ",".join(fields)
         endpoint = endpoint+"?_fields="+temp_fields
@@ -122,13 +126,13 @@ def main():
         host=dict(required=True, type='str'),
         comment=dict(type='str'),
         fields=dict(type='list'),
-        filters=dict(type='dict', default={}),
+        filters=dict(type='dict', default={"type": "NS"}),
         tags=dict(type='list', elements='dict', default=[{}]),
         state=dict(type='str', default='present', choices=['present','absent','gather'])
     )
 
     choice_map = {
-                  'gather': get_dns_view_gather
+                  'gather': get_ns_record_gather
                   }
 
     module = AnsibleModule(argument_spec=argument_spec)

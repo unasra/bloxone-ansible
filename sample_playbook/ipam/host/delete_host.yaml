@@ -2,7 +2,7 @@
 - hosts: localhost
   connection: local
   collections:
-    - infoblox.b1ddi_modules
+    - blox.b1ddi
 
  vars:
   - host: "{{ Host server to connect to }}"

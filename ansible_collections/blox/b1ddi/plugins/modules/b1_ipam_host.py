@@ -4,17 +4,16 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-from email.policy import default
 __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-module: b1_dhcp_option_space
-author: "Akhilesh Kabade (@akhilesh-kabade-infoblox), Sriram Kannan(@kannans)"
-short_description: Configure DHCP Option Space on Infoblox BloxOne DDI
+module: b1_ipam_host
+author: "Akhilesh Kabade (@akhilesh-kabade-blox), Sriram Kannan(@kannans)"
+short_description: Configure Host on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:
-  -  Create, Update and Delete Option spaces on Infoblox BloxOne DDI. This module manages the IPAM Optionspace object using BloxOne REST APIs.
+  -  Create, Update and Delete Hosts on Infoblox BloxOne DDI. This module manages the IPAM Host object using BloxOne REST APIs.
 requirements:
   - requests
 options:
@@ -28,16 +27,18 @@ options:
       - Configures the Infoblox BloxOne host URL.
     type: dict
     required: true
+  addresses:
+    description:
+      - Configures the name of IP Space and the associated Address for the Host
+        When fetching, the address field can be in the form “a.b.c.d”. 
+    type: list
+    required: true
   name:
     description:
-      - Configures the name of object to fetch, add, update or remove from the system. User can also update the name as it is possible
+      - Configures the name of IPAM Host to fetch, add, update or remove from the system. User can also update the name as it is possible
         to pass a dict containing I(new_name), I(old_name).
     type: str
     required: true
-  protocol:
-    description:
-      - Configures the protocol,this field is mandatory for only Create flow. It should be either ip4 or ip6.
-    type: str
   tags:
     description:
       - Configures the tags associated with the object to add or update from the system.
@@ -61,32 +62,35 @@ options:
 '''
 
 EXAMPLES = '''
-   - name: Create Option Space
-     b1_dhcp_option_space:
-        name: "test"
-        protocol: ip4/ip6
+   - name: Create Host 
+      b1_ipam_host:
+        name: "Test-Ansible-host"
+        comment: "This is created by QA"
+        addresses:
+          - "ip_space" : "{{address}}"
         tags:
           - "Org": "Infoblox"
-          - "Dept": "QA"
-        comment: "This is a test Optionspace to validate Infoblox Ansible Collection"
-        host: "{{ host }}"
+          - "Dept": "Engineering"
         api_key: "{{ api }}"
+        host: "{{ host }}"
         state: present
 
-   - name: Update Option Space
-     b1_dhcp_option_space:
-        name: '{"new_name": "test1", "old_name": "test"}'
+   - name: Update Host 
+      b1_ipam_host:
+        name: "Test-Ansible-host"
+        comment: "This is created by QA"
+        addresses:
+          - "ip_space" : "{{address}}"
         tags:
           - "Org": "Infoblox"
-          - "Dept": "QA"
-        comment: "Updating the Optionspace"
-        host: "{{ host }}"
+          - "Dept": "Engineering"
         api_key: "{{ api }}"
+        host: "{{ host }}"
         state: present
 
-   - name: Delete Option Space
-     b1_dhcp_option_space:
-        name: "test"
+   - name: Delete Host
+      b1_ipam_host:
+        name: "host"
         host: "{{ host }}"
         api_key: "{{ api }}"
         state: absent
@@ -99,18 +103,18 @@ from ansible.module_utils.basic import *
 from ..module_utils.b1ddi import Request, Utilities
 import json
 
-def get_option_space(data):
-    '''Fetches the BloxOne DDI Option Space object
+def get_host(data):
+    '''Fetches the BloxOne DDI Host object
     '''
     connector = Request(data['host'], data['api_key'])
     if data['name'] == '':
-        return connector.get('/api/ddi/v1/dhcp/option_space')
+        return connector.get('/api/ddi/v1/ipam/host')
     else:
-        endpoint = '{}\"{}\"'.format('/api/ddi/v1/dhcp/option_space?_filter=name==',data['name'])
+        endpoint = '{}\"{}\"'.format('/api/ddi/v1/ipam/host?_filter=name==',data['name'])
         return connector.get(endpoint)
 
-def update_option_space(data):
-    '''Updates the existing BloxOne DDI Option Space object
+def update_host(data):
+    '''Updates the existing BloxOne DDI Host object
     '''
     connector = Request(data['host'], data['api_key'])
     helper = Utilities()
@@ -125,55 +129,87 @@ def update_option_space(data):
     else:
         new_name = data['name']
 
-    reference = get_option_space(data)
+    reference = get_host(data)
     if('results' in reference[2].keys() and len(reference[2]['results']) > 0):
         ref_id = reference[2]['results'][0]['id']
     else:
-        return(True, False, {'status': '400', 'response': 'Option Space not found', 'data':data})
+        return(True, False, {'status': '400', 'response': 'Host not found', 'data':data})
     payload={}
     payload['name'] = new_name
     payload['comment'] = data['comment'] if 'comment' in data.keys() else ''
     if 'tags' in data.keys():
         payload['tags']=helper.flatten_dict_object('tags',data)
-    
+    if "addresses" in data.keys() and data["addresses"] != None:
+                    aspace = connector.get("/api/ddi/v1/ipam/ip_space")
+                    if (
+                        "results" in aspace[2].keys()
+                        and len(aspace[2]["results"]) > 0
+                    ):
+                        payload["addresses"] = helper.hostaddresses(
+                            "addresses", data, aspace[2]["results"]
+                        )
+                    else:
+                        return (
+                            True,
+                            False,
+                            {
+                                "status": "400",
+                                "response": "Error in fetching addresses",
+                                "data": data,
+                            },
+                        )
     endpoint  = '{}{}'.format('/api/ddi/v1/',ref_id)
     return connector.update(endpoint, payload)
     
-def create_option_space(data):
-    '''Creates a new BloxOne DDI Option Space object
+def create_host(data):
+    '''Creates a new BloxOne DDI Host object
     '''
     connector = Request(data['host'], data['api_key'])
     helper = Utilities()
     if data['name'] != '':
         if 'new_name' in data['name']:
-            return update_option_space(data)
+            return update_host(data)
         else:
-            option_space = get_option_space(data)
+            host_obj = get_host(data)
             payload={}
-            if('results' in option_space[2].keys() and len(option_space[2]['results']) > 0):
-                return update_option_space(data)
+            if('results' in host_obj[2].keys() and len(host_obj[2]['results']) > 0):
+                return update_host(data)
             else:
                 payload['name'] = data['name']
                 payload['comment'] = data['comment'] if 'comment' in data.keys() else ''
-                if 'protocol' in data.keys() and (data['protocol'] == "ip4" or "ip6"):
-                    payload['protocol']= data['protocol']
-                else:
-                    return(True, False, {'status': '400', 'response': 'invalid protocol','data':data})      
                 if 'tags' in data.keys():
                     payload['tags']=helper.flatten_dict_object('tags',data)
-                
-                return connector.create('/api/ddi/v1/dhcp/option_space', payload)
+                if "addresses" in data.keys() and data["addresses"] != None:
+                    aspace = connector.get("/api/ddi/v1/ipam/ip_space")
+                    if (
+                        "results" in aspace[2].keys()
+                        and len(aspace[2]["results"]) > 0
+                    ):
+                        payload["addresses"] = helper.hostaddresses(
+                            "addresses", data, aspace[2]["results"]
+                        )
+                    else:
+                        return (
+                            True,
+                            False,
+                            {
+                                "status": "400",
+                                "response": "Error in fetching addresses",
+                                "data": data,
+                            },
+                        )
+                return connector.create('/api/ddi/v1/ipam/host', payload)
     else:
         return(True, False, {'status': '400', 'response': 'object name not defined','data':data})                
 
-def delete_option_space(data):
-    '''Delete a BloxOne DDI Option Space object
+def delete_host(data):
+    '''Delete a BloxOne DDI Host object
     '''
     if data['name'] != '':
         connector = Request(data['host'], data['api_key'])
-        option_space = get_option_space(data)
-        if('results' in option_space[2].keys() and len(option_space[2]['results']) > 0):
-            ref_id = option_space[2]['results'][0]['id']
+        host_obj = get_host(data)
+        if('results' in host_obj[2].keys() and len(host_obj[2]['results']) > 0):
+            ref_id = host_obj[2]['results'][0]['id']
             endpoint = '{}{}'.format('/api/ddi/v1/', ref_id)
             return connector.delete(endpoint)
         else:
@@ -186,7 +222,7 @@ def main():
     '''
     argument_spec = dict(
         name=dict(default='', type='str'),
-        protocol=dict(default='',type='str'),
+        addresses=dict(type="list", elements="dict", default=[{}]),
         api_key=dict(required=True, type='str'),
         host=dict(required=True, type='str'),
         comment=dict(type='str'),
@@ -194,9 +230,9 @@ def main():
         state=dict(type='str', default='present', choices=['present','absent','get'])
     )
 
-    choice_map = {'present': create_option_space,
-                  'get': get_option_space,
-                  'absent': delete_option_space}
+    choice_map = {'present': create_host,
+                  'get': get_host,
+                  'absent': delete_host}
 
     module = AnsibleModule(argument_spec=argument_spec)
     (is_error, has_changed, result) = choice_map.get(module.params['state'])(module.params)

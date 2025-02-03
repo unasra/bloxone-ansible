@@ -2,7 +2,7 @@
 
 About 
 =====
-Infoblox BloxOne Ansible Collection (`infoblox.b1ddi_modules`) allows you to automate your DDI (DHCP, DNS and IPAM) objects hosted in the BloxOne platform. It thus enables the management of DDI objects using Ansibe automation. BloxOne ansible collection provides modules and plugins through which DDI objects can be read, created, updated and deleted. The collections also allows an organisation to integrate DDI automation into their IT automation framework. 
+Infoblox BloxOne Ansible Collection (`blox.b1ddi`) allows you to automate your DDI (DHCP, DNS and IPAM) objects hosted in the BloxOne platform. It thus enables the management of DDI objects using Ansibe automation. BloxOne ansible collection provides modules and plugins through which DDI objects can be read, created, updated and deleted. The collections also allows an organisation to integrate DDI automation into their IT automation framework. 
 
 Requirements
 ============
@@ -15,7 +15,7 @@ Collection Overview
 
 Modules
 --------
-The `infoblox.b1ddi_modules` collection has the following content:
+The `blox.b1ddi` collection has the following content:
 
 DNS
 ----
@@ -72,7 +72,7 @@ The following example requirements.yaml
 ```yaml
 ---
 collections:
-  - name: git@github.com:infobloxopen/bloxone-ansible.git#ansible_collections/infoblox/b1ddi_modules
+  - name: git@github.com:infobloxopen/bloxone-ansible.git#ansible_collections/blox/b1ddi
     type: git
     version: main
 

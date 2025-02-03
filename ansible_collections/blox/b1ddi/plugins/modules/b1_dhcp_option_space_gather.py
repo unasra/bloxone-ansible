@@ -8,12 +8,12 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-module: b1_ns_record_gather
-author: "amishra2@infoblox"
-short_description: Configure IP space on Infoblox BloxOne DDI
+module: b1_dhcp_option_space_gather
+author: "Akhilesh Kabade (@akhilesh-kabade-blox), Sriram Kannan(@kannans)"
+short_description: Configure Option space on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:
-  - Get, Create, Update and Delete IP spaces on Infoblox BloxOne DDI. This module manages the IPAM IP space object using BloxOne REST APIs.
+  - Gather facts about Option spaces in Infoblox BloxOne DDI. This module manages the gather fact of IPAM Option space object using BloxOne REST APIs.
 requirements:
   - requests
 options:
@@ -25,22 +25,17 @@ options:
   host:
     description:
       - Configures the Infoblox BloxOne host URL.
-    type: dict
-    required: true
-  name:
-    description:
-      - Configures the name of object to fetch, add, update or remove from the system. User can also update the name as it is possible
-        to pass a dict containing I(new_name), I(old_name).
     type: str
     required: true
-  tags:
+  fields:
     description:
-      - Configures the tags associated with the object to add or update from the system.
+      - List of fields to be available from the gather results.
     type: list
-  comment:
+    required: false
+  filters:
     description:
-      - Configures the comment/description for the object to add or update from the system.
-    type: str
+      - Filters the result based on the key, value provided .
+    type: dict
   state:
     description:
       - Configures the state of the object on BloxOne DDI. When this value is set to C(get), the object
@@ -50,12 +45,21 @@ options:
     type: str
     default: present
     choices:
-      - gather
+      - present
+      - absent
     required: true
 '''
 
   
 EXAMPLES = '''
+
+    - name: Gather Option Space
+      b1_dhcp_option_space_gather:
+        host: "{{ host }}"
+        api_key: "{{ api }}"
+        state: gather
+      register: option_spaces
+    - debug: msg="{{ option_spaces }}"
 
 '''
 
@@ -65,22 +69,16 @@ from ansible.module_utils.basic import *
 from ..module_utils.b1ddi import Request, Utilities
 import json
 
-def get_ns_record_gather(data):
-    '''Fetches the BloxOne DDI IP Space object
+def get_option_space(data):
+    '''Fetches the BloxOne DDI Option Space object
     '''
-    '''Fetches the BloxOne DDI IP Space object
-    '''
+    
     connector = Request(data['host'], data['api_key'])
-
-    endpoint = f'/api/ddi/v1/dns/record'
+    endpoint = f'/api/ddi/v1/dhcp/option_space'
 
     flag=0
     fields=data['fields']
     filters=data['filters']
-    if 'name' in filters:
-        filters['dns_name_in_zone'] = filters.pop('name')
-    if 'dname' in filters:
-        filters['dns_rdata'] = filters.pop('dname')
     if fields!=None and isinstance(fields, list):
         temp_fields = ",".join(fields)
         endpoint = endpoint+"?_fields="+temp_fields
@@ -126,13 +124,13 @@ def main():
         host=dict(required=True, type='str'),
         comment=dict(type='str'),
         fields=dict(type='list'),
-        filters=dict(type='dict', default={"type": "NS"}),
+        filters=dict(type='dict', default={}),
         tags=dict(type='list', elements='dict', default=[{}]),
         state=dict(type='str', default='present', choices=['present','absent','gather'])
     )
 
     choice_map = {
-                  'gather': get_ns_record_gather
+                  'gather': get_option_space
                   }
 
     module = AnsibleModule(argument_spec=argument_spec)
@@ -145,3 +143,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

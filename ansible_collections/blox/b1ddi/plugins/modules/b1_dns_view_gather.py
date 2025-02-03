@@ -8,8 +8,8 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-module: b1_dns_zone_gather
-author: "amishra2@infoblox"
+module: b1_dns_view_gather
+author: "amishra2@blox, Sriram kanan"
 short_description: Configure IP space on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:
@@ -65,14 +65,14 @@ from ansible.module_utils.basic import *
 from ..module_utils.b1ddi import Request, Utilities
 import json
 
-def get_dns_zone_gather(data):
+def get_dns_view_gather(data):
     '''Fetches the BloxOne DDI IP Space object
     '''
     '''Fetches the BloxOne DDI IP Space object
     '''
     connector = Request(data['host'], data['api_key'])
 
-    endpoint = f'/api/ddi/v1/dns/auth_zone'
+    endpoint = f'/api/ddi/v1/dns/view'
 
     flag=0
     fields=data['fields']
@@ -128,7 +128,7 @@ def main():
     )
 
     choice_map = {
-                  'gather': get_dns_zone_gather
+                  'gather': get_dns_view_gather
                   }
 
     module = AnsibleModule(argument_spec=argument_spec)

@@ -9,7 +9,7 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: b1_a_record
-author: "Amit Mishra amishra2@infoblox.com"
+author: "Amit Mishra amishra2@blox.com"
 short_description: Configure DNS Authoritative Zone on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:

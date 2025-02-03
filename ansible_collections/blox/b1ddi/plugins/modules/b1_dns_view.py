@@ -9,7 +9,7 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: b1_dns_view
-author: "Vedant Sethia (@vedantsethia)/Amit Mishra (@amishra2-infoblox)"
+author: "Vedant Sethia (@vedantsethia)/Amit Mishra (@amishra2-blox)"
 short_description: Configure DNS View on Infoblox BloxOne DDI
 version_added: "1.0.1"
 description:
