@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -12,7 +12,7 @@
 
     # Basic Test for Generic Record
     - name: Create a Generic Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -26,7 +26,7 @@
       register: generic_record
 
     - name: Get Generic Record information by ID
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
             id: "{{ generic_record.id }}"
       register: generic_record_info
     - assert:
@@ -34,7 +34,7 @@
           - generic_record_info.objects | length == 1
 
     - name: Get Generic Record information by filters
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -46,7 +46,7 @@
           - generic_record_info.objects[0].id == generic_record.id
 
     - name: Get Generic Record information by raw filter query
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filter_query: "name_in_zone=='{{ record_name }}' and zone=='{{ _auth_zone.id }}' and type=='TYPE256'"
     - assert:
         that:
@@ -54,7 +54,7 @@
           - generic_record_info.objects[0].id == generic_record.id
 
     - name: Get Generic Record information by tag filters
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         tag_filters:
           location: "{{ tag_value }}"
     - assert:
@@ -65,7 +65,7 @@
   always:
     # Cleanup if the test fails
     - name: "Delete Generic Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
