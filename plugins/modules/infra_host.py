@@ -277,16 +277,16 @@ item:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from infra_mgmt import Host, HostsApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class InfraHostModule(UniversalDdiAnsibleModule):
+class InfraHostModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(InfraHostModule, self).__init__(*args, **kwargs)
 

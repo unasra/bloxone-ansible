@@ -277,16 +277,16 @@ objects:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from dns_config import AuthNsgApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class AuthNsgInfoModule(UniversalDdiAnsibleModule):
+class AuthNsgInfoModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(AuthNsgInfoModule, self).__init__(*args, **kwargs)
         self._existing = None

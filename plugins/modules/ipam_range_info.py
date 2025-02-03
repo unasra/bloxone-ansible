@@ -454,16 +454,16 @@ objects:
                     returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from ipam import RangeApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class RangeInfoModule(UniversalDdiAnsibleModule):
+class RangeInfoModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(RangeInfoModule, self).__init__(*args, **kwargs)
         self._existing = None

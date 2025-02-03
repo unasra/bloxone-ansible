@@ -71,16 +71,16 @@ EXAMPLES = r"""
       state: "revoked"
 """
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from infra_provision import JoinToken, UIJoinTokenApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class JoinTokenModule(UniversalDdiAnsibleModule):
+class JoinTokenModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(JoinTokenModule, self).__init__(*args, **kwargs)
 

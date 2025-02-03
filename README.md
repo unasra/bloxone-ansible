@@ -6,7 +6,7 @@ The Infoblox BloxOne Collection (`infoblox.universal_ddi`) includes a variety of
 
 ### What's new in v2
 - The collection has been renamed from `b1ddi_modules` to `universal_ddi`.
-- The modules are renamed to follow the BloxOne API naming conventions. The old module names are deprecated and will be removed in the next major release.
+- The modules are renamed to follow the Universal DDI API naming conventions. The old module names are deprecated and will be removed in the next major release.
 - The modules are rewritten to use the [Universal DDI Python client](https://github.com/infobloxopen/universal-ddi-python-client) library. This provides a more consistent experience across the modules and supports a wider range of BloxOne services.
 
 ## Requirements

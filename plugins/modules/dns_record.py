@@ -935,16 +935,16 @@ item:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from dns_data import Record, RecordApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class RecordModule(UniversalDdiAnsibleModule):
+class RecordModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(RecordModule, self).__init__(*args, **kwargs)
 

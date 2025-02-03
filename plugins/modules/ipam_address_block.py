@@ -2341,16 +2341,16 @@ item:
                     returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDdiAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from ipam import AddressBlock, AddressBlockApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by UniversalDdiAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class AddressBlockModule(UniversalDdiAnsibleModule):
+class AddressBlockModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(AddressBlockModule, self).__init__(*args, **kwargs)
         self.next_available_id = self.params.get("next_available_id")
