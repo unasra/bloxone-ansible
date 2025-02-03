@@ -1,13 +1,23 @@
+ancestor: null
 releases:
-  2.0.0:
-    changes:
-    - major_changes:
-      - Create new IP space
-      - Create new View
-      - Create new
   1.0.0:
     changes:
-    - major_changes:
-      - Create IP space
-      - Create View
+      major_changes:
+      - Create
       - Create A record
+      - Create IP space
+      release_summary: Initial release
+  2.0.0:
+    changes:
+      major_changes:
+      - Create
+      - Create
+      - Create
+      release_summary: Initial release part 2
+  3.0.0:
+    changes:
+      release_summary: Initial release part 3
+      major_changes:
+      - Create meow
+      - Create aeow
+      - Create beow

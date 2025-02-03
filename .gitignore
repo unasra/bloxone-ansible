@@ -1,3 +1,5 @@
 # intellij configs
 .idea/
 .vscode/
+
+./changelogs/.plugin-cache.yaml

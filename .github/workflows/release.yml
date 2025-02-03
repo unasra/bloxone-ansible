@@ -34,14 +34,9 @@ jobs:
 
       - name: Generate release log (RST)
         run: |
-          antsibull-changelog generate -vvv --output changelog-release.rst --only-latest "$RELEASE_VERSION"
+          antsibull-changelog release -vvv --only-latest "$RELEASE_VERSION"
         shell: bash
 
-      - name: Upload RST release log
-        uses: actions/upload-artifact@v4
-        with:
-          name: changelog-rst
-          path: CHANGELOG.rst
 
   release:
     name: Publish to Ansible Galaxy
@@ -52,17 +47,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-#      - name: Set up Python
-#        uses: actions/setup-python@v5
-#        with:
-#          python-version: '3.x'
-#
-#      - name: Install Ansible Galaxy dependencies
-#        run: |
-#          python -m pip install --upgrade pip
-#          pip install ansible-core
-
-      - name: Injecting a dynamic Collection version
+      - name: Publish Collection to Ansible Galaxy
         uses: artis3n/ansible_galaxy_collection@v2
         with:
           api_key: 'a321eecd8cf5c1a6e073508eeac093f854d79588'
