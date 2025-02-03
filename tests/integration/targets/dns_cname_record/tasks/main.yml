@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -10,7 +10,7 @@
         record_name: "test-cname-record-{{ 999999 | random | string }}"
 
     - name: Create a CNAME Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -20,7 +20,7 @@
       check_mode: true
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -33,7 +33,7 @@
         - cname_record_info.objects | length == 0
 
     - name: Create a CNAME Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -42,7 +42,7 @@
         state: present
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -59,7 +59,7 @@
         - cname_record_info.objects[0].zone == cname_record.object.zone
 
     - name: Create a CNAME Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -73,7 +73,7 @@
           - cname_record is not failed
 
     - name: Delete the CNAME Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -83,7 +83,7 @@
       check_mode: true
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -96,7 +96,7 @@
         - cname_record_info.objects | length == 1
 
     - name: Delete the CNAME Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -105,7 +105,7 @@
         state: absent
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -117,7 +117,7 @@
         - cname_record_info.objects | length == 0
 
     - name: Delete the CNAME Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -131,7 +131,7 @@
         - cname_record is not failed
 
     - name: Create a CNAME Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -141,7 +141,7 @@
         state: present
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -155,7 +155,7 @@
         - cname_record_info.objects[0].comment == "This is a test CNAME Record"
 
     - name: Create a CNAME Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -165,7 +165,7 @@
         state: present
       register: cname_record_ttl
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -179,7 +179,7 @@
         - cname_record_info.objects[0].ttl == 3600
 
     - name: Create a CNAME Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -189,7 +189,7 @@
         state: present
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -203,7 +203,7 @@
           - cname_record_info.objects[0].disabled == true
 
     - name: Create a CNAME Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -214,7 +214,7 @@
         state: present
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -228,7 +228,7 @@
             - cname_record_info.objects[0].tags.location == "site-1"
 
     - name: Create a CNAME Record with Inheritance Sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CNAME"
@@ -240,7 +240,7 @@
         state: present
       register: cname_record
     - name: Get information about the CNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -255,7 +255,7 @@
 
   always:
      - name: "Delete the CNAME Record"
-       infoblox.bloxone.dns_record:
+       infoblox.universal_ddi.dns_record:
          name_in_zone: "{{ record_name }}"
          zone: "{{ _auth_zone.id }}"
          type: "CNAME"

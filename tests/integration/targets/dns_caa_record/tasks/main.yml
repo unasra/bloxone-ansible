@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -9,7 +9,7 @@
         record_name: "test-caa-record-{{ 999999 | random | string }}"
 
     - name: Create a CAA Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -19,7 +19,7 @@
       check_mode: true
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -31,7 +31,7 @@
         - caa_record_info.objects | length == 0
 
     - name: Create a CAA Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -40,7 +40,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -57,7 +57,7 @@
         - caa_record_info.objects[0].zone == caa_record.object.zone
 
     - name: Create a CAA Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -71,7 +71,7 @@
           - caa_record is not failed
 
     - name: Delete the CAA Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           tag: "issue"
@@ -81,7 +81,7 @@
       check_mode: true
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -93,7 +93,7 @@
         - caa_record_info.objects | length == 1
 
     - name: Delete the CAA Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           tag: "issue"
@@ -102,7 +102,7 @@
         state: absent
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -113,7 +113,7 @@
         - caa_record_info.objects | length == 0
 
     - name: Delete the CAA Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           tag: "issue"
@@ -127,7 +127,7 @@
         - caa_record is not failed
 
     - name: Create a CAA Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -137,7 +137,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -150,7 +150,7 @@
         - caa_record_info.objects[0].comment == "This is a test CAA Record"
 
     - name: Create a CAA Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -160,7 +160,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -173,7 +173,7 @@
         - caa_record_info.objects[0].ttl == 3600
 
     - name: Create DNS CAA Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -183,7 +183,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -196,7 +196,7 @@
           - caa_record_info.objects[0].disabled == true
 
     - name: Create DNS CAA Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -207,7 +207,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -220,7 +220,7 @@
           - caa_record_info.objects[0].tags.location == "site-1"
 
     - name: Create a CAA Record with Inheritance Sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -232,7 +232,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -245,7 +245,7 @@
           - caa_record_info.objects[0].inheritance_sources.ttl.action == "inherit"
 
     - name: Create a CAA Record with Flags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:
@@ -255,7 +255,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "CAA"
@@ -268,7 +268,7 @@
          - caa_record_info.objects[0].rdata.flags == 1
 
     - name: Create a CAA record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
@@ -278,7 +278,7 @@
         state: present
       register: caa_record
     - name: Get information about the CAA Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -294,7 +294,7 @@
 
   always:
     - name: "Delete CAA Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "CAA"
         rdata:

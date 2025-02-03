@@ -53,27 +53,27 @@ options:
         required: false
 
 extends_documentation_fragment:
-    - infoblox.bloxone.common
+    - infoblox.universal_ddi.common
 """  # noqa: E501
 
 EXAMPLES = r"""
   - name: Get Record information by ID
-    infoblox.bloxone.dns_record_info:
+    infoblox.universal_ddi.dns_record_info:
       id: "{{ a_record_id }}"
 
   - name: Get Record information by filters 
-    infoblox.bloxone.dns_record_info:
+    infoblox.universal_ddi.dns_record_info:
       filters:
         name_in_zone: "example_a_record"
         zone: "example_zone_id"
         type: "A"
 
   - name: Get Record information by raw filter query 
-    infoblox.bloxone.dns_record_info:
+    infoblox.universal_ddi.dns_record_info:
       filter_query: "name_in_zone=='example_a_record' and zone=='example_zone_id' and type=='A'"
 
   - name: Get Record information by tag filters
-    infoblox.bloxone.dns_record_info:
+    infoblox.universal_ddi.dns_record_info:
       tag_filters:
         location: "site-1"   
 """  # noqa: E501
@@ -538,16 +538,16 @@ objects:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import UniversalDDIAnsibleModule
 
 try:
     from dns_data import RecordApi
     from universal_ddi_client import ApiException, NotFoundException
 except ImportError:
-    pass  # Handled by BloxoneAnsibleModule
+    pass  # Handled by UniversalDDIAnsibleModule
 
 
-class RecordInfoModule(BloxoneAnsibleModule):
+class RecordInfoModule(UniversalDDIAnsibleModule):
     def __init__(self, *args, **kwargs):
         super(RecordInfoModule, self).__init__(*args, **kwargs)
         self._existing = None
