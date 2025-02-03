@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: changelog-rst
-          path: changelog-release.rst
+          path: CHANGELOG.rst
 
   release:
     name: Publish to Ansible Galaxy
@@ -52,18 +52,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
-      - name: Install Ansible Galaxy dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install ansible-core
+#      - name: Set up Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.x'
+#
+#      - name: Install Ansible Galaxy dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install ansible-core
 
       - name: Injecting a dynamic Collection version
         uses: artis3n/ansible_galaxy_collection@v2
         with:
-          api_key: '${{ secrets.GALAXY_API_KEY }}'
+          api_key: 'a321eecd8cf5c1a6e073508eeac093f854d79588'
           galaxy_version: '${{ env.RELEASE_VERSION }}'
