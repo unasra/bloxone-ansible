@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -10,7 +10,7 @@
         record_name: "test-txt-record-{{ 999999 | random | string }}"
 
     - name: Create a TXT Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -19,7 +19,7 @@
       check_mode: true
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
             zone: "{{ _auth_zone.id }}"
             type: TXT
@@ -31,7 +31,7 @@
         - txt_record_info.objects | length == 0
 
     - name: Create a TXT Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -39,7 +39,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -55,7 +55,7 @@
         - txt_record_info.objects[0].zone == txt_record.object.zone
 
     - name: Create a TXT Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -68,7 +68,7 @@
           - txt_record is not failed
 
     - name: Delete the TXT Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -77,7 +77,7 @@
       check_mode: true
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -89,7 +89,7 @@
         - txt_record_info.objects | length == 1
 
     - name: Delete the TXT Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -97,7 +97,7 @@
         state: absent
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
             zone: "{{ _auth_zone.id }}"
             type: TXT
@@ -108,7 +108,7 @@
         - txt_record_info.objects | length == 0
 
     - name: Delete the TXT Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "sample text"
@@ -121,7 +121,7 @@
         - txt_record is not failed
 
     - name: Create a TXT Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "example text"
@@ -130,7 +130,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -143,7 +143,7 @@
         - txt_record_info.objects[0].comment == "This is a test TXT Record"
 
     - name: Create a TXT Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "example text"
@@ -152,7 +152,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -165,7 +165,7 @@
         - txt_record_info.objects[0].ttl == 3600
 
     - name: Create a TXT Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "example text"
@@ -174,7 +174,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -187,7 +187,7 @@
           - txt_record_info.objects[0].disabled == true
 
     - name: Create a TXT Record with TAGS
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           text: "example text"
@@ -197,7 +197,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: TXT
@@ -210,7 +210,7 @@
           - txt_record_info.objects[0].tags.location == "site-1"
 
     - name: Create a TXT Record with Inheritance Sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "TXT"
         rdata:
@@ -221,7 +221,7 @@
         state: present
       register: txt_record
     - name: Get information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "TXT"
@@ -234,7 +234,7 @@
           - txt_record_info.objects[0].inheritance_sources.ttl.action == "inherit"
 
     - name: Create a TXT Record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -243,7 +243,7 @@
         state: present
       register: txt_record
     - name: Get Information about the TXT Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -259,7 +259,7 @@
 
   always:
     - name: "Delete the TXT Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:

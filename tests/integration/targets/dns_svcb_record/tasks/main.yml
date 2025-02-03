@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -9,7 +9,7 @@
         record_name: "test-svcb-record-{{ 999999 | random | string }}"
 
     - name: Create the SVCB Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -18,7 +18,7 @@
       check_mode: true
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -30,7 +30,7 @@
         - svcb_record_info.objects | length == 0
 
     - name: Create the SVCB Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -38,7 +38,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -54,7 +54,7 @@
         - svcb_record_info.objects[0].zone == svcb_record.object.zone
 
     - name: Create the SVCB Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -67,7 +67,7 @@
           - svcb_record is not failed
 
     - name: Delete the SVCB Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           target_name: "service.example.com."
@@ -76,7 +76,7 @@
       check_mode: true
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -88,7 +88,7 @@
         - svcb_record_info.objects | length == 1
 
     - name: Delete the SVCB Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           target_name: "service.example.com."
@@ -96,7 +96,7 @@
         state: absent
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
             zone: "{{ _auth_zone.id }}"
             type: "SVCB"
@@ -107,7 +107,7 @@
         - svcb_record_info.objects | length == 0
 
     - name: Delete the SVCB Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           target_name: "service.example.com."
@@ -120,7 +120,7 @@
         - svcb_record is not failed
 
     - name: Create SVCB Record with Comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -129,7 +129,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -142,7 +142,7 @@
           - svcb_record_info.objects[0].comment == "This is a test SVCB Record"
 
     - name: Create SVCB Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -151,7 +151,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -164,7 +164,7 @@
         - svcb_record_info.objects[0].disabled == true
 
     - name: Create SVCB Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -173,7 +173,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -186,7 +186,7 @@
         - svcb_record_info.objects[0].ttl == 3600
 
     - name: Create SVCB Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -196,7 +196,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -209,7 +209,7 @@
           - svcb_record_info.objects[0].tags.location == "site-1"
 
     - name: Create SVCB Record with Inheritance Sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "SVCB"
         rdata:
@@ -220,7 +220,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "SVCB"
@@ -233,7 +233,7 @@
           - svcb_record_info.objects[0].inheritance_sources.ttl.action == "inherit"
 
     - name: Create a SVCB Record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -242,7 +242,7 @@
         state: present
       register: svcb_record
     - name: Get information about the SVCB Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -258,7 +258,7 @@
 
   always:
     - name: "Delete SVCB Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:

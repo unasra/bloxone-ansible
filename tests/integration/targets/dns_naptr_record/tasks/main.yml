@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -9,7 +9,7 @@
         record_name: "test-naptr-record-{{ 999999 | random | string }}"
 
     - name: Create a NAPTR Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -21,7 +21,7 @@
       check_mode: true
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -33,7 +33,7 @@
         - naptr_record_info.objects | length == 0
 
     - name: Create a NAPTR Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -44,7 +44,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -63,7 +63,7 @@
         - naptr_record_info.objects[0].zone == naptr_record.object.zone
 
     - name: Create a NAPTR Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -79,7 +79,7 @@
           - naptr_record is not failed
 
     - name: Delete the NAPTR Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           order: 20
@@ -91,7 +91,7 @@
       check_mode: true
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -103,7 +103,7 @@
         - naptr_record_info.objects | length == 1
 
     - name: Delete the NAPTR Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           order: 20
@@ -114,7 +114,7 @@
         state: absent
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
             zone: "{{ _auth_zone.id }}"
             type: "NAPTR"
@@ -125,7 +125,7 @@
         - naptr_record_info.objects | length == 0
 
     - name: Delete the NAPTR Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         rdata:
           order: 20
@@ -141,7 +141,7 @@
         - naptr_record is not failed
 
     - name: Create NAPTR Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -153,7 +153,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -166,7 +166,7 @@
         - naptr_record_info.objects[0].comment == "This is a test NAPTR Record"
 
     - name: Create NAPTR Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -178,7 +178,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -191,7 +191,7 @@
         - naptr_record_info.objects[0].ttl == 3600
 
     - name: Create NAPTR Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -204,7 +204,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -217,7 +217,7 @@
           - naptr_record_info.objects[0].tags.location == "site-1"
 
     - name: Create NAPTR Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -229,7 +229,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -242,7 +242,7 @@
           - naptr_record_info.objects[0].disabled == true
 
     - name: Create NAPTR Record with Inheritance Sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -256,7 +256,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -269,7 +269,7 @@
           - naptr_record_info.objects[0].inheritance_sources.ttl.action == "inherit"
 
     - name: Create a NAPTR Record with Flags and Regexp
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
         rdata:
@@ -282,7 +282,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "NAPTR"
@@ -298,7 +298,7 @@
           - naptr_record_info.objects[0].rdata.replacement == "."
 
     - name: Create a NAPTR Record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "NAPTR"
@@ -310,7 +310,7 @@
         state: present
       register: naptr_record
     - name: Get information about the NAPTR Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -327,7 +327,7 @@
   always:
     # Cleanup if the test fails
     - name: "Delete NAPTR Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:

@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -10,7 +10,7 @@
 
     # Create an NS Record (check mode)
     - name: Create an NS Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -20,7 +20,7 @@
       check_mode: true
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -33,7 +33,7 @@
         - ns_record_info.objects | length == 0
 
     - name: Create an NS Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -42,7 +42,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -59,7 +59,7 @@
         - ns_record_info.objects[0].zone == ns_record.object.zone
 
     - name: Create an NS Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "NS"
@@ -73,7 +73,7 @@
           - ns_record is not failed
 
     - name: Delete the NS Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -83,7 +83,7 @@
       check_mode: true
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -96,7 +96,7 @@
         - ns_record_info.objects | length == 1
 
     - name: Delete the NS Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -105,7 +105,7 @@
         state: absent
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -117,7 +117,7 @@
         - ns_record_info.objects | length == 0
 
     - name: Delete the NS Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -131,7 +131,7 @@
         - ns_record is not failed
 
     - name: Create a NS Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -141,7 +141,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -155,7 +155,7 @@
         - ns_record_info.objects[0].comment == "This is a test NS Record"
 
     - name: Create a NS Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -165,7 +165,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -179,7 +179,7 @@
         - ns_record_info.objects[0].ttl == 5000
 
     - name: Create a NS Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -189,7 +189,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -203,7 +203,7 @@
           - ns_record_info.objects[0].disabled == true
 
     - name: Create a NS Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:
@@ -214,7 +214,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -228,7 +228,7 @@
             - ns_record_info.objects[0].tags.location == "site-1"
 
     - name: Create a NS Record with Inheritance sources
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "NS"
@@ -240,7 +240,7 @@
         state: present
       register: ns_record
     - name: Get information about the NS Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -255,7 +255,7 @@
 
   always:
     - name: Delete the NS Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:

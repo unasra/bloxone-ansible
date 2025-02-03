@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -12,7 +12,7 @@
 
     # Basic Test for SRV Record
     - name: Create an SRV Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         type: "SRV"
@@ -26,7 +26,7 @@
       register: srv_record
 
     - name: Get SRV Record information by ID
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         id: "{{ srv_record.id }}"
       register: srv_record_info
     - assert:
@@ -34,7 +34,7 @@
           - srv_record_info.objects | length == 1
 
     - name: Get SRV Record information by filters
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -46,7 +46,7 @@
           - srv_record_info.objects[0].id == srv_record.id
 
     - name: Get SRV Record information by raw filter query
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filter_query: "name_in_zone=='{{ record_name }}' and zone=='{{ _auth_zone.id }}' and type=='SRV'"
     - assert:
         that:
@@ -54,7 +54,7 @@
           - srv_record_info.objects[0].id == srv_record.id
 
     - name: Get SRV Record information by tag filters
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         tag_filters:
           location: "{{ tag_value }}"
     - assert:
@@ -65,7 +65,7 @@
   always:
     # Cleanup if the test fails
     - name: "Delete SRV Record"
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         name_in_zone: "{{ record_name }}"
         zone: "{{ _auth_zone.id }}"
         rdata:

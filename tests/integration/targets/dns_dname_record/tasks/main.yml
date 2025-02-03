@@ -1,6 +1,6 @@
 ---
 - module_defaults:
-    group/infoblox.bloxone.all:
+    group/infoblox.universal_ddi.all:
       portal_url: "{{ portal_url }}"
       portal_key: "{{ portal_key }}"
 
@@ -9,7 +9,7 @@
         record_name: "test-dname-record-{{ 999999 | random | string }}"
 
     - name: Create a DNAME Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -18,7 +18,7 @@
       check_mode: true
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -30,7 +30,7 @@
         - dname_record_info.objects | length == 0
 
     - name: Create a DNAME Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -38,7 +38,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -54,7 +54,7 @@
         - dname_record_info.objects[0].zone == dname_record.object.zone
 
     - name: Create a DNAME Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -67,7 +67,7 @@
           - dname_record is not failed
 
     - name: Delete the DNAME Record (check mode)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -76,7 +76,7 @@
       check_mode: true
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -88,7 +88,7 @@
         - dname_record_info.objects | length == 1
 
     - name: Delete the DNAME Record
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -96,7 +96,7 @@
         state: absent
       register: dname_record_delete
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
             zone: "{{ _auth_zone.id }}"
             type: "DNAME"
@@ -107,7 +107,7 @@
         - dname_record_info.objects | length == 0
 
     - name: Delete the DNAME Record (idempotent)
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -120,7 +120,7 @@
         - dname_record is not failed
 
     - name: Create a DNAME Record with comment
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -129,7 +129,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -142,7 +142,7 @@
         - dname_record_info.objects[0].comment == "This is a test DNAME Record"
 
     - name: Create a DNAME Record with TTL
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -151,7 +151,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -164,7 +164,7 @@
         - dname_record_info.objects[0].ttl == 3600
 
     - name: Create a DNAME Record with Disabled
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -173,7 +173,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -186,7 +186,7 @@
           - dname_record_info.objects[0].disabled == true
 
     - name: Create a DNAME Record with Tags
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -196,7 +196,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -209,7 +209,7 @@
             - dname_record_info.objects[0].tags.location == "site-1"
 
     - name: Create a DNAME Record with Inheritance Options
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         type: "DNAME"
         rdata:
@@ -220,7 +220,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           zone: "{{ _auth_zone.id }}"
           type: "DNAME"
@@ -233,7 +233,7 @@
           - dname_record_info.objects[0].inheritance_sources.ttl.action == "inherit"
 
     - name: Create a DNAME record with Name in Zone and Zone
-      infoblox.bloxone.dns_record:
+      infoblox.universal_ddi.dns_record:
         zone: "{{ _auth_zone.id }}"
         name_in_zone: "{{ record_name }}"
         type: "DNAME"
@@ -242,7 +242,7 @@
         state: present
       register: dname_record
     - name: Get information about the DNAME Record
-      infoblox.bloxone.dns_record_info:
+      infoblox.universal_ddi.dns_record_info:
         filters:
           name_in_zone: "{{ record_name }}"
           zone: "{{ _auth_zone.id }}"
@@ -258,7 +258,7 @@
 
   always:
      - name: "Delete the DNAME Record"
-       infoblox.bloxone.dns_record:
+       infoblox.universal_ddi.dns_record:
          name_in_zone: "{{ record_name }}"
          zone: "{{ _auth_zone.id }}"
          type: "DNAME"
