@@ -13,7 +13,7 @@ module: dns_record
 short_description: Manage DNS Resource Record
 description:
     - Manage DNS Resource Record
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:

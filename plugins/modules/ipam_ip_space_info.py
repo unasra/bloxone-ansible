@@ -14,7 +14,7 @@ short_description: Retrieves information about existing IP Spaces.
 description:
     - Retrieves information about existing IP Spaces.
     - The IP Space object represents an entire address space
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:

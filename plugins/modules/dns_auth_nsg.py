@@ -13,7 +13,7 @@ module: dns_auth_nsg
 short_description: Manage AuthNsg
 description:
     - Manage AuthNSG
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:

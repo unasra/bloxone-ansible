@@ -13,7 +13,7 @@ module: dns_view
 short_description: Manage View
 description:
     - Manage View
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:

@@ -13,7 +13,7 @@ module: infra_join_token_info
 short_description: Manage JoinToken
 description:
     - Manage JoinToken
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:
