@@ -13,7 +13,7 @@ module: kerberos_key_info
 short_description: Retrieves Kerberos Keys
 description:
     - Retrieves information about existing Kerberos Keys.
-version_added: 2.0.0
+version_added: 1.0.0
 author: Infoblox Inc. (@infobloxopen)
 options:
     id:
@@ -43,21 +43,21 @@ options:
         required: false
 
 extends_documentation_fragment:
-    - infoblox.bloxone.common
+    - infoblox.universal_ddi.common
 """  # noqa: E501
 
 EXAMPLES = r"""
     - name: Get Kerberos key information by filters (principal)
-      infoblox.bloxone.kerberos_key_info:
+      infoblox.universal_ddi.kerberos_key_info:
         filters:
           principal: "{{ principal }}"
 
     - name: Get Kerberos key information by raw filter query
-      infoblox.bloxone.kerberos_key_info:
+      infoblox.universal_ddi.kerberos_key_info:
         filter_query: "principal=='{{ principal }}'"
 
     - name: Get Kerberos key information by tag filters
-      infoblox.bloxone.kerberos_key_info:
+      infoblox.universal_ddi.kerberos_key_info:
         tag_filters:
           location: "site-1"
 """
@@ -117,7 +117,7 @@ objects:
             returned: Always
 """  # noqa: E501
 
-from ansible_collections.infoblox.bloxone.plugins.module_utils.modules import BloxoneAnsibleModule
+from ansible_collections.infoblox.universal_ddi.plugins.module_utils.modules import BloxoneAnsibleModule
 
 try:
     from keys import KerberosApi
