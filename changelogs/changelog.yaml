@@ -28,3 +28,10 @@ releases:
       - Create ceow
       - Create deow
       release_summary: Initial release part 4
+  5.0.0:
+    changes:
+      major_changes:
+      - Create beow
+      - Create zeow
+      - Create deow
+      release_summary: Initial release part 5

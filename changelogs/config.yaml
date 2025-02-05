@@ -12,6 +12,9 @@ notesdir: fragments
 prelude_section_name: release_summary
 prelude_section_title: Release Summary
 sanitize_changelog: true
+output_formats:
+- rst
+- md
 sections:
 - - major_changes
   - Major Changes
