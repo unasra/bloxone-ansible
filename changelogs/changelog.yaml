@@ -32,6 +32,13 @@ releases:
     changes:
       major_changes:
       - Create beow
-      - Create zeow
       - Create deow
+      - Create zeow
       release_summary: Initial release part 5
+  6.0.0:
+    changes:
+      major_changes:
+      - Create beow
+      - Create deow
+      - Create zeow
+      release_summary: Initial release part 6

@@ -4,6 +4,36 @@ Blox.B1ddi Release Notes
 
 .. contents:: Topics
 
+v6.0.0
+======
+
+Release Summary
+---------------
+
+Initial release part 6
+
+Major Changes
+-------------
+
+- Create beow
+- Create deow
+- Create zeow
+
+v5.0.0
+======
+
+Release Summary
+---------------
+
+Initial release part 5
+
+Major Changes
+-------------
+
+- Create beow
+- Create deow
+- Create zeow
+
 v4.0.0
 ======
 
