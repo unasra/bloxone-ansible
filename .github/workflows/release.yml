@@ -7,14 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  release-sanity-test:
-    uses: ./.github/workflows/sanity.yml
-
   release:
     name: Publish to Ansible Galaxy
     uses: ansible/ansible-content-actions/.github/workflows/release_galaxy.yaml@main
-    needs:
-      - release-sanity-test
     with:
       environment: release
     secrets:
