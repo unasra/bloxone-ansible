@@ -3,42 +3,7 @@ releases:
   1.0.0:
     changes:
       major_changes:
-      - Create
-      - Create A record
-      - Create IP space
+      - Test A
+      - Test B
+      - Test C
       release_summary: Initial release
-  2.0.0:
-    changes:
-      major_changes:
-      - Create
-      - Create
-      - Create
-      release_summary: Initial release part 2
-  3.0.0:
-    changes:
-      major_changes:
-      - Create aeow
-      - Create beow
-      - Create meow
-      release_summary: Initial release part 3
-  4.0.0:
-    changes:
-      major_changes:
-      - Create beow
-      - Create ceow
-      - Create deow
-      release_summary: Initial release part 4
-  5.0.0:
-    changes:
-      major_changes:
-      - Create beow
-      - Create deow
-      - Create zeow
-      release_summary: Initial release part 5
-  6.0.0:
-    changes:
-      major_changes:
-      - Create beow
-      - Create deow
-      - Create zeow
-      release_summary: Initial release part 6
